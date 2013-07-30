@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+  <extension point="org.eclipse.ui.popupMenus">
+      <objectContribution
+              objectClass="org.eclipse.jdt.core.ICompilationUnit"
+                    id="org.eclipse.ecf.tools.servicegenerator.handlers">
+           <action
+                        label="Generate R-service"
+                        icon="icons/test.gif"
+                   class="org.eclipse.ecf.tools.servicegenerator.handler.ServiceGenHandler"
+                        id="org.eclipse.ecf.tools.servicegenerator.handlers">
+            </action>
+      </objectContribution>
+</extension> 
+</plugin>
