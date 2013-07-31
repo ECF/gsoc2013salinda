@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+  <!-- This extension point is outdate! Use command/handlers instead (see http://www.vogella.com/articles/EclipseCommandsAdvanced/article.html) -->
   <extension point="org.eclipse.ui.popupMenus">
       <objectContribution
               objectClass="org.eclipse.jdt.core.ICompilationUnit"
