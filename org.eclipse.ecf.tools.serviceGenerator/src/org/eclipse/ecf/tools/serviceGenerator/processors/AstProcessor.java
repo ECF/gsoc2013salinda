@@ -52,7 +52,7 @@ public class AstProcessor {
 	 * 
 	 * @param icompilationUnit-user selected file
 	 */
-	public AstProcessor(ICompilationUnit icompilationUnit) {
+	public AstProcessor(ICompilationUnit icompilationUnit,Logger log) {
 		 ast = AST.newAST(AST.JLS4);
 		 ASTParser parser = ASTParser.newParser(AST.JLS4);
 		 parser.setSource(icompilationUnit);
@@ -60,7 +60,7 @@ public class AstProcessor {
 		 newAsyncInterfaceUnit = ast.newCompilationUnit();
 		 newimplClazzUnit = ast.newCompilationUnit();
 		 methodVisitor = new MethodVisitor();
-		 log = new Logger(Activator.context);
+		 this.log = log;
 	}
 	
 	public CompilationUnit getNewunit() {

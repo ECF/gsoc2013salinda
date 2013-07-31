@@ -13,21 +13,26 @@ import java.util.List;
 import org.eclipse.ecf.tools.serviceGenerator.processors.AstProcessor;
 import org.eclipse.ecf.tools.serviceGenerator.processors.IResourcesProcessor;
 import org.eclipse.ecf.tools.serviceGenerator.processors.TemplateProcessor;
+import org.eclipse.ecf.tools.servicegenerator.Activator;
 import org.eclipse.ecf.tools.servicegenerator.utils.AsyncProperties;
+import org.eclipse.ecf.tools.servicegenerator.utils.Logger;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionDelegate;
+import org.eclipse.ui.PlatformUI;
  
 
 
 public class ServiceGenHandler  implements IActionDelegate{
 
 	private IStructuredSelection selection;
-
+    private Logger log;
 	@Override
 	public void run(IAction arg0) {
 		if (selection != null) {
@@ -45,6 +50,7 @@ public class ServiceGenHandler  implements IActionDelegate{
 		
 		if (selection instanceof IStructuredSelection) {
 			this.selection = (IStructuredSelection) selection;
+			log = new Logger(Activator.context);
 		}	
 	}
 
@@ -64,7 +70,7 @@ public class ServiceGenHandler  implements IActionDelegate{
 		 
 		 if(serviceType!=0){
 			 /*JSL4 based processor new units generate by this processor */
-			 AstProcessor astProcessor = new AstProcessor(icompilationUnit);
+			 AstProcessor astProcessor = new AstProcessor(icompilationUnit,log);
 			 /*This is used to serialize the new compilation units created by astprocessor */
 			 TemplateProcessor templateProcessor = new TemplateProcessor(javaProject);
 			 
@@ -106,9 +112,11 @@ public class ServiceGenHandler  implements IActionDelegate{
 				 templateProcessor.generateAstTemplate(astProcessor.getImpleunit(), implPackgeName, impleName);
 			 }
 		 }
- 		 } catch (Exception e) {
-				e.printStackTrace();
-			}
+		 Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+		 MessageDialog.openError(shell, "Generate R-Service", "Couldn't the RemoteService annotaion in selected file");
+ 		 } catch (Throwable e) {
+				log.log(1, "Class generating process has faild !"+e.getMessage(), e);
+	     }
 	}
 
 	private ICompilationUnit getIcompilationunit(ISelection selection) {
