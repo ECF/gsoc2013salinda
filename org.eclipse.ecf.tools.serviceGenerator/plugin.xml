@@ -14,5 +14,6 @@
                         id="org.eclipse.ecf.tools.servicegenerator.handlers">
             </action>
       </objectContribution>
-</extension> 
+</extension>
+<!-- Most IDE users probably won't need the remote service generation in 99% of their coding, thus only show "Generate R-service" when the java project or selected class identifies as a remote service project --> 
 </plugin>
