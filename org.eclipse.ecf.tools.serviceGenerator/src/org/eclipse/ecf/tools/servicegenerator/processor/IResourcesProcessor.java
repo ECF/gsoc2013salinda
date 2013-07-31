@@ -25,6 +25,7 @@ import org.eclipse.jdt.core.IPackageDeclaration;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
+//MAK This collides with the "I for interface" convention. Do not prefix implementation classes with a capital I.
 public class IResourcesProcessor {
 	
  public static List<String> getImports(ICompilationUnit compilationUnit) throws JavaModelException {
