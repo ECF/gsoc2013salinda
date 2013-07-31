@@ -15,5 +15,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)	
 public @interface Async {
 
-	String type() default "callback";//future ,both
+	//MAK do not expect the user to use strings for parameters, use enums instead (see RetentionPolicy.RUNTIME or ElementType.METHOD above)
+	AsyncType type() default AsyncType.CALLBACK;
 }

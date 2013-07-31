@@ -55,6 +55,7 @@ public class IResourcesProcessor {
 				IAnnotatable annotatable = (IAnnotatable)iType;
 				IAnnotation[] annotations = annotatable.getAnnotations();
 				for (IAnnotation iAnnotation : annotations) {
+					//MAK Replace to handle enums instead!!!
 					if("RemoteService".equals(iAnnotation.getElementName())){
 						IMemberValuePair[] memberValuePairs = iAnnotation.getMemberValuePairs();
 						 for (IMemberValuePair iMemberValuePair : memberValuePairs) {
