@@ -111,10 +111,11 @@ public class ServiceGenHandler  implements IActionDelegate{
 				 /*for a sync-service imple-clazz Only*/
 				 templateProcessor.generateAstTemplate(astProcessor.getImpleunit(), implPackgeName, impleName);
 			 }
-		 }
+		 }else{
 		 Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-		 MessageDialog.openError(shell, "Generate R-Service", "Couldn't the RemoteService annotaion in selected file");
- 		 } catch (Throwable e) {
+		 MessageDialog.openError(shell, "Generate R-Service", "Couldn't find the RemoteService annotaion in selected file");
+		 }
+		 } catch (Throwable e) {
 				log.log(1, "Class generating process has faild !"+e.getMessage(), e);
 	     }
 	}

@@ -35,7 +35,7 @@ public class TemplateProcessor {
 		try{
 		    sourcePackage.createCompilationUnit(newClazz+".java",unit.toString() , false, null);
 		}catch(Exception e){
-			 ICompilationUnit compilationUnit = sourcePackage.getCompilationUnit(newClazz+".java");
+			  ICompilationUnit compilationUnit = sourcePackage.getCompilationUnit(newClazz+".java");
 			  compilationUnit.delete(false, new NullProgressMonitor());
 			  javaProject.getProject().refreshLocal(IResource.DEPTH_INFINITE,new NullProgressMonitor());
 			  sourcePackage.createCompilationUnit(newClazz+".java",unit.toString() , false, null);

@@ -7,9 +7,10 @@
 ******************************************************************************/
 package org.eclipse.ecf.tools.servicegenerator.utils;
 
-import org.eclipse.osgi.util.NLS;
+import java.util.ResourceBundle;
 
-public class AsyncProperties extends NLS {
+
+public class AsyncProperties{
 	private static final String BUNDLE_NAME = "AsyncService";
 	public static String AsyncService_Str_Impors_callbackProxy;
 	public static String AsyncService_Str_Imports_callback;
@@ -18,7 +19,11 @@ public class AsyncProperties extends NLS {
 
 	static {
 		// initialize resource bundle
-		NLS.initializeMessages(BUNDLE_NAME, AsyncProperties.class);
+		ResourceBundle asyncServiceProperties = ResourceBundle.getBundle(BUNDLE_NAME);
+		AsyncProperties.AsyncService_Str_Import_IFuture = asyncServiceProperties.getString("AsyncService_Str_Import_IFuture");
+		AsyncProperties.AsyncService_Str_Imports_callback = asyncServiceProperties.getString("AsyncService_Str_Imports_callback");
+		AsyncProperties.AsyncService_Str_Impors_callbackProxy = asyncServiceProperties.getString("AsyncService_Str_Impors_callbackProxy");
+		AsyncProperties.AsyncService_Str_IAsyncRemoteServiceProxy = asyncServiceProperties.getString("AsyncService_Str_IAsyncRemoteServiceProxy");
 	}
 
 	private AsyncProperties() {
