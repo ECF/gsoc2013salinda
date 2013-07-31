@@ -1,3 +1,4 @@
+//MAK This code appears to be copied from somewhere. Thus, a copyright header is missing crediting the source.
 package org.eclipse.ecf.tools.servicegenerator.utils;
 
 import java.io.PrintStream;
