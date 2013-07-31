@@ -48,6 +48,8 @@ public class IResourcesProcessor {
 	 return split[0];
  }
  
+ //MAK Use enums and alike to model return values. Nobody understands the semantical meaning of 0,1,2 without studying your code/implementation.
+ //At the very minimum add javadoc!!!
  public static int getServiceType(ICompilationUnit icompilationUnit)
 			throws JavaModelException {
 		IType[] types = icompilationUnit.getTypes();
