@@ -36,8 +36,9 @@ public class ServiceGenHandler  implements IActionDelegate{
 			} catch (Exception e) {
 			   //MAK simply ignoring exception is very bad practice!!!
 			}
+		} else {
+			//MAK user feedback
 		}
-		
 	}
 		  
 	@Override
@@ -106,6 +107,8 @@ public class ServiceGenHandler  implements IActionDelegate{
 				 /*for a sync-service imple-clazz Only*/
 				 templateProcessor.generateAstTemplate(astProcessor.getImpleunit(), implPackgeName, impleName);
 			 }
+		 } else {
+			 //MAK Notify user that something has gone wrong here. E.g. raise a dialog or log to error log
 		 }
  		 } catch (Exception e) {
 				e.printStackTrace();
