@@ -1,3 +1,4 @@
+//MAK copyright is yours, not Composent Inc.
 /*******************************************************************************
 * Copyright (c) 2013 Composent, Inc. and others. All rights reserved. This
 * program and the accompanying materials are made available under the terms of
