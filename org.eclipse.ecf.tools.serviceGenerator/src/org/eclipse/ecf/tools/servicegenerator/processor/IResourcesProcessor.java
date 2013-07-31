@@ -32,6 +32,7 @@ public class IResourcesProcessor {
 		List<String>  importsList = new ArrayList<String>();
 		IImportDeclaration[] imports = compilationUnit.getImports();
 		 for (IImportDeclaration iImportDeclaration : imports) {
+			 // At least extract technical strings to constants
 			if (!"org.eclipse.ecf.tools.serviceGenerator.annotaions.Async"
 					.equals(iImportDeclaration.getElementName())
 					&& !"import org.eclipse.ecf.tools.serviceGenerator.annotaions.RemoteService"
