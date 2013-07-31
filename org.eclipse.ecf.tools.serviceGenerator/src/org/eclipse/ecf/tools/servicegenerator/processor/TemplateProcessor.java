@@ -5,7 +5,7 @@
 * available at http://www.eclipse.org/legal/epl-v10.html
 *
 ******************************************************************************/
-package org.eclipse.ecf.tools.serviceGenerator.processors;
+package org.eclipse.ecf.tools.servicegenerator.processor;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;

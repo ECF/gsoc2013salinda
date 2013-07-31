@@ -10,9 +10,9 @@ package org.eclipse.ecf.tools.servicegenerator.handler;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.ecf.tools.serviceGenerator.processors.AstProcessor;
-import org.eclipse.ecf.tools.serviceGenerator.processors.IResourcesProcessor;
-import org.eclipse.ecf.tools.serviceGenerator.processors.TemplateProcessor;
+import org.eclipse.ecf.tools.servicegenerator.processor.AstProcessor;
+import org.eclipse.ecf.tools.servicegenerator.processor.IResourcesProcessor;
+import org.eclipse.ecf.tools.servicegenerator.processor.TemplateProcessor;
 import org.eclipse.ecf.tools.servicegenerator.utils.AsyncProperties;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;

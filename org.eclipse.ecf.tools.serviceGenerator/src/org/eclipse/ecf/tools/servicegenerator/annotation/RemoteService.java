@@ -5,15 +5,16 @@
 * available at http://www.eclipse.org/legal/epl-v10.html
 *
 ******************************************************************************/
-package org.eclipse.ecf.tools.serviceGenerator.annotaions;
+package org.eclipse.ecf.tools.servicegenerator.annotation;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)	
-public @interface Async {
-
-	String type() default "callback";//future ,both
+@Target(ElementType.TYPE)	
+public @interface RemoteService {
+	String type() default "sync";
+	String container() default "ecf.r_osgi.peer";
 }
