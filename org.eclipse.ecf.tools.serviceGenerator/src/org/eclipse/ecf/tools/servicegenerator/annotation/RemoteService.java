@@ -16,5 +16,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)	
 public @interface RemoteService {
 	String type() default "sync";
+	
+	//MAK The container type is a deployment question that should not be answered during the implementation phase. 
 	String container() default "ecf.r_osgi.peer";
 }
