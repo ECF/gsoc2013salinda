@@ -82,6 +82,7 @@ public class ServiceGenHandler  implements IActionDelegate{
 						.createType(
 								generatedInterfaceName,
 								true,
+								//MAK NLS is for internationalization/localization (i18n/i10n)!
 								AsyncProperties.AsyncService_Str_IAsyncRemoteServiceProxy);
 			 /*create a new Type for Impl-Clazz*/
 			 TypeDeclaration createdImpleType = astProcessor.createType(impleName, false,generatedInterfaceName);
