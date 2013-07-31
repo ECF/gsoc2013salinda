@@ -34,7 +34,7 @@ public class ServiceGenHandler  implements IActionDelegate{
 			 try {
 				 clazzGen(selection);
 			} catch (Exception e) {
-			 
+			   //MAK simply ignoring exception is very bad practice!!!
 			}
 		}
 		
