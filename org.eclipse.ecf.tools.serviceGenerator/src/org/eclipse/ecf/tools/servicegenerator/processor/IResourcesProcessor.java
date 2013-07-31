@@ -97,6 +97,9 @@ public class IResourcesProcessor {
    public static IJavaProject getJavaProject(ICompilationUnit compilationUnit) throws CoreException{
 	     IJavaProject javaProject = compilationUnit.getJavaProject();
 		 IProject project = javaProject.getProject(); 
+		// MAK Why do you have to rebuild the project? If you really have to,
+		// use a progress monitor so that users can cancel if compilation takes
+		// too long on a large project.
 		 project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
 		 project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 		 return javaProject;
