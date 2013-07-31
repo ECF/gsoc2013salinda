@@ -6,6 +6,7 @@
       <objectContribution
               objectClass="org.eclipse.jdt.core.ICompilationUnit"
                     id="org.eclipse.ecf.tools.servicegenerator.handlers">
+                        <!-- proper icon missing/replace test.git -->
            <action
                         label="Generate R-service"
                         icon="icons/test.gif"
