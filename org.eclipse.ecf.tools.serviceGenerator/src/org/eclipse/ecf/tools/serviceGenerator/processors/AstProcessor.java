@@ -10,7 +10,6 @@ package org.eclipse.ecf.tools.serviceGenerator.processors;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.ecf.tools.serviceGenerator.Activator;
 import org.eclipse.ecf.tools.serviceGenerator.utils.AsyncMethodType;
 import org.eclipse.ecf.tools.serviceGenerator.utils.AsyncProperties;
 import org.eclipse.ecf.tools.serviceGenerator.utils.Logger;
@@ -34,7 +33,6 @@ import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
-import org.eclipse.jdt.core.dom.ThrowStatement;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.WildcardType;

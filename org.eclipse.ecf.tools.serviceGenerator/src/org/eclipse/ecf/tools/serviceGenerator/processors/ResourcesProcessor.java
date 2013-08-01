@@ -7,20 +7,12 @@
 ******************************************************************************/
 package org.eclipse.ecf.tools.serviceGenerator.processors;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.ecf.tools.serviceGenerator.utils.AnnotaionTypes;
 import org.eclipse.ecf.tools.serviceGenerator.utils.RServiceType;
 import org.eclipse.jdt.core.IAnnotatable;
 import org.eclipse.jdt.core.IAnnotation;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IImportDeclaration;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMemberValuePair;
 import org.eclipse.jdt.core.IPackageDeclaration;
