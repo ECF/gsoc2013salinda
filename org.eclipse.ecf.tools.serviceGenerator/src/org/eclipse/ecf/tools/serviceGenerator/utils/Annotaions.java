@@ -1,12 +1,12 @@
 package org.eclipse.ecf.tools.serviceGenerator.utils;
 
-public enum AnnotaionTypes {
+public enum Annotaions {
 	RService(1,"RemoteService"),ASYNC_METHOD(2,"Async");
 	 
 	 private int code;
 	 private String strCode;
 	 
-	 private AnnotaionTypes(int code,String strCode) {
+	 private Annotaions(int code,String strCode) {
 	   this.code = code;
 	   this.strCode = strCode;
 	 }

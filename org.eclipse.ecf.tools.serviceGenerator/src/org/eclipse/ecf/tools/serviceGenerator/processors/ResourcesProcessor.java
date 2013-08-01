@@ -8,7 +8,7 @@
 package org.eclipse.ecf.tools.serviceGenerator.processors;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.ecf.tools.serviceGenerator.utils.AnnotaionTypes;
+import org.eclipse.ecf.tools.serviceGenerator.utils.Annotaions;
 import org.eclipse.ecf.tools.serviceGenerator.utils.RServiceType;
 import org.eclipse.jdt.core.IAnnotatable;
 import org.eclipse.jdt.core.IAnnotation;
@@ -49,7 +49,7 @@ public class ResourcesProcessor {
 				IAnnotatable annotatable = (IAnnotatable)iType;
 				IAnnotation[] annotations = annotatable.getAnnotations();
 				for (IAnnotation iAnnotation : annotations) {
-					if(AnnotaionTypes.RService.getStrCode().equals(iAnnotation.getElementName())){
+					if(Annotaions.RService.getStrCode().equals(iAnnotation.getElementName())){
 						IMemberValuePair[] memberValuePairs = iAnnotation.getMemberValuePairs();
 						 for (IMemberValuePair iMemberValuePair : memberValuePairs) {
 							   if("type".equals(iMemberValuePair.getMemberName())){

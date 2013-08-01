@@ -40,8 +40,8 @@ import org.eclipse.jdt.core.dom.WildcardType;
 
 public class AstProcessor {
 	
-	private static final String ASYNC_ANOTATION= "org.eclipse.ecf.tools.serviceGenerator.annotaions.Async";
-	private static final String REMOTE_SERVICE_ANOTATION="org.eclipse.ecf.tools.serviceGenerator.annotaions.RemoteService";
+	private static final String ASYNC_ANOTATION= "org.eclipse.ecf.tools.serviceGenerator.annotations.Async";
+	private static final String REMOTE_SERVICE_ANOTATION="org.eclipse.ecf.tools.serviceGenerator.annotations.RemoteService";
 	private CompilationUnit origenalInterfaceUnit;
 	private CompilationUnit newAsyncInterfaceUnit;
 	private CompilationUnit newimplClazzUnit;
