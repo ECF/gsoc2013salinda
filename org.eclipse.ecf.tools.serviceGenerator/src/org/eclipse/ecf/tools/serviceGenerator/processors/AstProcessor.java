@@ -95,14 +95,14 @@ public class AstProcessor {
 		List<String> asynInterfaceImpoerts = new ArrayList<String>();
 
 		asynInterfaceImpoerts
-				.add(AsyncProperties.AsyncService_Str_Import_IFuture);
+				.add(AsyncProperties.ASYNC_SERVICE_STR_IMPORTS_IFUTURE);
 		asynInterfaceImpoerts
-				.add(AsyncProperties.AsyncService_Str_Impors_callbackProxy);
+				.add(AsyncProperties.ASYNC_SERVICE_STR_IMPORTS_CALLBACkPROXY);
 		asynInterfaceImpoerts
-				.add(AsyncProperties.AsyncService_Str_Imports_callback);
+				.add(AsyncProperties.ASYNC_SERVICE_STR_IMPORTS_CALLBACK);
 		if (servicetype == 1) {
-			extraImports.add(AsyncProperties.AsyncService_Str_Import_IFuture);
-			extraImports.add(AsyncProperties.AsyncService_Str_Imports_callback);
+			extraImports.add(AsyncProperties.ASYNC_SERVICE_STR_IMPORTS_IFUTURE);
+			extraImports.add(AsyncProperties.ASYNC_SERVICE_STR_IMPORTS_CALLBACK);
 		}
 		createImports(newAsyncInterfaceUnit, asynInterfaceImpoerts);
 		createImports(newimplClazzUnit, extraImports);

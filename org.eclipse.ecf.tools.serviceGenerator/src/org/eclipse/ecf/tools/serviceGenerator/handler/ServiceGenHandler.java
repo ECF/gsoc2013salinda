@@ -83,7 +83,7 @@ public class ServiceGenHandler  implements IActionDelegate{
 						.createType(
 								generatedInterfaceName,
 								true,
-								AsyncProperties.AsyncService_Str_IAsyncRemoteServiceProxy);
+								AsyncProperties.ASYNC_SERVICE_STR_IASYNC_REMOTE_SERVICEPROXY);
 			 /*create a new Type for Impl-Clazz*/
 			 TypeDeclaration createdImpleType = astProcessor.createType(impleName, false,generatedInterfaceName);
 			 /*create a new package for implClazz*/

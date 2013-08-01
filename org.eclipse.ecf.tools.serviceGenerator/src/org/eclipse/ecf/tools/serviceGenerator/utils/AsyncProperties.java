@@ -11,21 +11,18 @@ import java.util.ResourceBundle;
 
 
 public class AsyncProperties{
-	private static final String BUNDLE_NAME = "AsyncService";
-	public static String AsyncService_Str_Impors_callbackProxy;
-	public static String AsyncService_Str_Imports_callback;
-	public static String AsyncService_Str_Import_IFuture;
-	public static String AsyncService_Str_IAsyncRemoteServiceProxy;
-	public static String Service_Gen_Error_Msg;
+private static final String BUNDLE_NAME = "AsyncService";
+
+	public static final String ASYNC_SERVICE_STR_IMPORTS_CALLBACkPROXY="org.eclipse.ecf.remoteservice.IAsyncRemoteServiceProxy";
+	public static final String ASYNC_SERVICE_STR_IMPORTS_CALLBACK="org.eclipse.ecf.remoteservice.IAsyncCallback";
+	public static final String ASYNC_SERVICE_STR_IMPORTS_IFUTURE="org.eclipse.equinox.concurrent.future.IFuture";
+	public static final String ASYNC_SERVICE_STR_IASYNC_REMOTE_SERVICEPROXY="IAsyncRemoteServiceProxy";
+	public static  String Service_Gen_Error_Msg;
 
 	static {
 		// initialize resource bundle
 		ResourceBundle asyncServiceProperties = ResourceBundle.getBundle(BUNDLE_NAME);
-		AsyncProperties.AsyncService_Str_Import_IFuture = asyncServiceProperties.getString("AsyncService_Str_Import_IFuture");
-		AsyncProperties.AsyncService_Str_Imports_callback = asyncServiceProperties.getString("AsyncService_Str_Imports_callback");
-		AsyncProperties.AsyncService_Str_Impors_callbackProxy = asyncServiceProperties.getString("AsyncService_Str_Impors_callbackProxy");
-		AsyncProperties.AsyncService_Str_IAsyncRemoteServiceProxy = asyncServiceProperties.getString("AsyncService_Str_IAsyncRemoteServiceProxy");
-		AsyncProperties.Service_Gen_Error_Msg = asyncServiceProperties.getString("Service_Gen_Error_Msg");
+        AsyncProperties.Service_Gen_Error_Msg = asyncServiceProperties.getString("Service_Gen_Error_Msg");
 	}
 
 	private AsyncProperties() {
