@@ -7,17 +7,28 @@
 ******************************************************************************/
 package org.eclipse.ecf.tools.serviceGenerator.processors;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ecf.tools.serviceGenerator.utils.Annotaions;
 import org.eclipse.ecf.tools.serviceGenerator.utils.RServiceType;
 import org.eclipse.jdt.core.IAnnotatable;
 import org.eclipse.jdt.core.IAnnotation;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMemberValuePair;
 import org.eclipse.jdt.core.IPackageDeclaration;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 
 public class ResourcesProcessor {
 	
@@ -34,6 +45,41 @@ public class ResourcesProcessor {
 		}
 		 return importsList;
 	}*/
+	
+public static List<ICompilationUnit> getICompilationUnits(ISelection selection){
+	List<ICompilationUnit> units = new ArrayList<ICompilationUnit>();
+	Object element = ((IStructuredSelection)selection).getFirstElement();
+	try {
+	 if (element instanceof IResource) {
+       IProject  project= ((IResource)element).getProject();
+       IJavaProject ijavaProject = JavaCore.create(project);
+         IPackageFragment[] packageFragments = ijavaProject.getPackageFragments();
+       for (IPackageFragment iPackageFragment : packageFragments) {
+    		   ICompilationUnit[] compilationUnits = iPackageFragment.getCompilationUnits();
+    		   for (ICompilationUnit iCompilationUnit : compilationUnits) {
+    			   units.add(iCompilationUnit);
+			}
+    	 }
+ 
+     }else if (element instanceof IPackageFragment) {
+    	   IPackageFragment iPackageFragment = (IPackageFragment)element;
+		  ICompilationUnit[] compilationUnits = iPackageFragment.getCompilationUnits();
+		  for (ICompilationUnit iCompilationUnit : compilationUnits) {
+			  units.add(iCompilationUnit);
+			}
+    	 
+
+     } else if (element instanceof IJavaElement) {
+    	 ICompilationUnit icompilationUnit =(ICompilationUnit) element;
+    	 units.add(icompilationUnit);
+     }
+	} catch (JavaModelException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	return units;
+	
+}	
  
  public static String getInterfaceName(ICompilationUnit icompilationUnit){
 	 String elementName = icompilationUnit.getElementName();

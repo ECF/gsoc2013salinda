@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-  <extension point="org.eclipse.ui.popupMenus">
+  <!--extension point="org.eclipse.ui.popupMenus">
       <objectContribution
               objectClass="org.eclipse.jdt.core.ICompilationUnit" 
                     id="org.eclipse.ecf.tools.servicegenerator.handlers">
@@ -13,13 +13,13 @@
             </action>
       </objectContribution>
       
-</extension> 
+</extension--> 
 <extension
        point="org.eclipse.ui.commands">
     <command
         description="Generate R-service files"
         id="org.eclipse.ecf.tools.serviceGenerator.file.generator"
-        name="Generate R-service-newMenu">
+        name="Generate R-service">
   	</command>
  </extension>
 
