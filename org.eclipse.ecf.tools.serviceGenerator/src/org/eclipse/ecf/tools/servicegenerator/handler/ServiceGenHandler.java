@@ -113,7 +113,7 @@ public class ServiceGenHandler  implements IActionDelegate{
 			 }
 		 }else{
 		 Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-		 MessageDialog.openError(shell, "Generate R-Service", "Couldn't find the RemoteService annotaion in selected file");
+		 MessageDialog.openError(shell, "Generate R-Service", AsyncProperties.Service_Gen_Error_Msg);
 		 }
 		 } catch (Throwable e) {
 				log.log(1, "Class generating process has faild !"+e.getMessage(), e);

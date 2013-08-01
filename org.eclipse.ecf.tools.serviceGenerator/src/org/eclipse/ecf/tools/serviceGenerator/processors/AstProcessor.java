@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.ecf.tools.servicegenerator.Activator;
+import org.eclipse.ecf.tools.servicegenerator.utils.AsyncMethodType;
 import org.eclipse.ecf.tools.servicegenerator.utils.AsyncProperties;
 import org.eclipse.ecf.tools.servicegenerator.utils.Logger;
 import org.eclipse.ecf.tools.servicegenerator.visitors.MethodVisitor;
@@ -41,12 +42,15 @@ import org.eclipse.jdt.core.dom.WildcardType;
 
 public class AstProcessor {
 	
+	private static final String ASYNC_ANOTATION= "org.eclipse.ecf.tools.serviceGenerator.annotaions.Async";
+	private static final String REMOTE_SERVICE_ANOTATION="org.eclipse.ecf.tools.serviceGenerator.annotaions.RemoteService";
 	private CompilationUnit origenalInterfaceUnit;
 	private CompilationUnit newAsyncInterfaceUnit;
 	private CompilationUnit newimplClazzUnit;
 	private MethodVisitor methodVisitor;
 	private AST ast;
     private Logger log;
+    
 	/**
 	 * basically generate new compilation units for Async interface and impl-clazzes
 	 * 
@@ -61,6 +65,7 @@ public class AstProcessor {
 		 newimplClazzUnit = ast.newCompilationUnit();
 		 methodVisitor = new MethodVisitor();
 		 this.log = log;
+		
 	}
 	
 	public CompilationUnit getNewunit() {
@@ -148,26 +153,21 @@ public class AstProcessor {
 			    for (MethodDeclaration userMethodDec : methods) {
 			    	List<Modifier> modifiers = userMethodDec.modifiers();
 			    	if(serviceType==1){
-			    	/*Valid async-types are callback,future or both 
-			    	 * Both -1
-			    	 * callback -2
-			    	 * future -3
-			    	 * */
 			    	int asynctype = getAsyncType(modifiers);
 			    	if(asynctype!=0){
-			    		if(asynctype==1){/*Both */
+			    		if(asynctype==AsyncMethodType.BOTH.getCode()){/*Both */
 			    			/*creating Interface*/
 			    			createMethod(type, userMethodDec, modifiers,true,false,false);
 			    			createMethod(type, userMethodDec, modifiers,false,false,false);
 			    			/*creating AsyncImpl*/
 			    			createMethod(impletype, userMethodDec, modifiers,true,true,false);
 			    			createMethod(impletype, userMethodDec, modifiers,false,true,false);
-			    		}else if(asynctype==2){/*call back only*/
+			    		}else if(asynctype==AsyncMethodType.CALLBACK.getCode()){/*call back only*/
 			    			/*creating Interface*/
 			    			createMethod(type, userMethodDec, modifiers,true,false,false); 
 			    			/*creating AsyncImpl*/
 			    			createMethod(impletype, userMethodDec, modifiers,true,true,false);
-			    		}else if(asynctype==3){/*Future Only*/
+			    		}else if(asynctype==AsyncMethodType.FUTURE.getCode()){/*Future Only*/
 			    			/*creating Interface*/
 			    			createMethod(type, userMethodDec, modifiers,false,false,false); 
 			    			/*creating AsyncImpl*/
@@ -198,8 +198,8 @@ public class AstProcessor {
         	   Name name = importDeclaration.getName();
         	   String fqn = name.getFullyQualifiedName();
         	   /*Removing imports related to annotations*/
-        	   if(!"org.eclipse.ecf.tools.serviceGenerator.annotaions.Async".equals(fqn)
-        			   &&!"org.eclipse.ecf.tools.serviceGenerator.annotaions.RemoteService".equals(fqn)){
+        	   if(!ASYNC_ANOTATION.equals(fqn)
+        			   &&!REMOTE_SERVICE_ANOTATION.equals(fqn)){
         		   unit.imports().add(getImportDec(fqn));
         	   }
 		}
@@ -460,12 +460,12 @@ public class AstProcessor {
 			    		 value = astNode.toString();
 					   }
 		    		   String[] split = value.split("=");
-		    			if("both".contains(split[1].subSequence(1, 5))){
-		    				return 1;
-		    			}else if("callback".contains(split[1].subSequence(1, 5))){
-		    				return 2;
-		    			}else if("future".contains(split[1].subSequence(1, 5))){
-		    				return 3;
+		    			if(AsyncMethodType.BOTH.getStrCode().contains(split[1].subSequence(1, 5))){
+		    				return AsyncMethodType.BOTH.getCode();
+		    			}else if(AsyncMethodType.CALLBACK.getStrCode().contains(split[1].subSequence(1, 5))){
+		    				return AsyncMethodType.CALLBACK.getCode();
+		    			}else if(AsyncMethodType.FUTURE.getStrCode().contains(split[1].subSequence(1, 5))){
+		    				return AsyncMethodType.FUTURE.getCode();
 		    		 }
 		 		 }
 		     }

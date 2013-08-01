@@ -16,6 +16,7 @@ public class AsyncProperties{
 	public static String AsyncService_Str_Imports_callback;
 	public static String AsyncService_Str_Import_IFuture;
 	public static String AsyncService_Str_IAsyncRemoteServiceProxy;
+	public static String Service_Gen_Error_Msg;
 
 	static {
 		// initialize resource bundle
@@ -24,6 +25,7 @@ public class AsyncProperties{
 		AsyncProperties.AsyncService_Str_Imports_callback = asyncServiceProperties.getString("AsyncService_Str_Imports_callback");
 		AsyncProperties.AsyncService_Str_Impors_callbackProxy = asyncServiceProperties.getString("AsyncService_Str_Impors_callbackProxy");
 		AsyncProperties.AsyncService_Str_IAsyncRemoteServiceProxy = asyncServiceProperties.getString("AsyncService_Str_IAsyncRemoteServiceProxy");
+		AsyncProperties.Service_Gen_Error_Msg = asyncServiceProperties.getString("Service_Gen_Error_Msg");
 	}
 
 	private AsyncProperties() {
