@@ -94,9 +94,6 @@ public class IResourcesProcessor {
  
    public static IJavaProject getJavaProject(ICompilationUnit compilationUnit) throws CoreException{
 	     IJavaProject javaProject = compilationUnit.getJavaProject();
-		 IProject project = javaProject.getProject(); 
-		 project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
-		 project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 		 return javaProject;
    }
 }
