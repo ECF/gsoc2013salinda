@@ -14,4 +14,51 @@
       </objectContribution>
       
 </extension> 
+<extension
+       point="org.eclipse.ui.commands">
+    <command
+        description="Generate R-service files"
+        id="org.eclipse.ecf.tools.serviceGenerator.file.generator"
+        name="Generate R-service-newMenu">
+  	</command>
+ </extension>
+
+    <extension
+       point="org.eclipse.ui.handlers">
+    <handler
+        class="org.eclipse.ecf.tools.serviceGenerator.handler.ServiceGenCommandHandler"
+        commandId="org.eclipse.ecf.tools.serviceGenerator.file.generator">
+  		</handler>
+ </extension>
+<extension point="org.eclipse.ui.menus">
+ <menuContribution locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+     <command
+           commandId="org.eclipse.ecf.tools.serviceGenerator.file.generator"
+           style="push">
+        <visibleWhen checkEnabled="false">
+            <with variable="activeMenuSelection">
+               <iterate ifEmpty="false" operator="and">
+               <or>  
+                  <and>
+                   <instanceof
+                     value="org.eclipse.core.resources.IProject">
+                  </instanceof>
+                  <test
+                    property="org.eclipse.core.resources.projectNature"
+                    value=" org.eclipse.jdt.core.javanature">
+                 </test>                 
+                  </and>
+                 <instanceof
+                     value="org.eclipse.jdt.core.ICompilationUnit">
+                  </instanceof>
+                  <instanceof
+                     value="org.eclipse.jdt.core.IPackageFragment">
+                  </instanceof>
+              </or>    
+               </iterate>  
+           </with>
+        </visibleWhen>
+     </command>
+  </menuContribution>
+</extension> 
 </plugin>
