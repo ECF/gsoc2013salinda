@@ -10,11 +10,11 @@ package org.eclipse.ecf.tools.serviceGenerator.processors;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.ecf.tools.servicegenerator.Activator;
-import org.eclipse.ecf.tools.servicegenerator.utils.AsyncMethodType;
-import org.eclipse.ecf.tools.servicegenerator.utils.AsyncProperties;
-import org.eclipse.ecf.tools.servicegenerator.utils.Logger;
-import org.eclipse.ecf.tools.servicegenerator.visitors.MethodVisitor;
+import org.eclipse.ecf.tools.serviceGenerator.Activator;
+import org.eclipse.ecf.tools.serviceGenerator.utils.AsyncMethodType;
+import org.eclipse.ecf.tools.serviceGenerator.utils.AsyncProperties;
+import org.eclipse.ecf.tools.serviceGenerator.utils.Logger;
+import org.eclipse.ecf.tools.serviceGenerator.visitors.MethodVisitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;

@@ -5,7 +5,7 @@
 * available at http://www.eclipse.org/legal/epl-v10.html
 *
 ******************************************************************************/
-package org.eclipse.ecf.tools.servicegenerator.utils;
+package org.eclipse.ecf.tools.serviceGenerator.utils;
 
 import java.util.ResourceBundle;
 

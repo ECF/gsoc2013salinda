@@ -1,12 +1,12 @@
-package org.eclipse.ecf.tools.servicegenerator.utils;
+package org.eclipse.ecf.tools.serviceGenerator.utils;
 
-public enum AsyncMethodType {
-	 BOTH(1,"both"),CALLBACK(2,"callback"),FUTURE(3,"future");
+public enum RServiceType {
+ ASYNC(1,"Async"),SYNC(2,"sync");
 	 
 	 private int code;
 	 private String strCode;
 	 
-	 private AsyncMethodType(int code,String strCode) {
+	 private RServiceType(int code,String strCode) {
 	   this.code = code;
 	   this.strCode = strCode;
 	 }

@@ -5,17 +5,17 @@
 * available at http://www.eclipse.org/legal/epl-v10.html
 *
 ******************************************************************************/
-package org.eclipse.ecf.tools.servicegenerator.handler;
+package org.eclipse.ecf.tools.serviceGenerator.handler;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.ecf.tools.serviceGenerator.Activator;
 import org.eclipse.ecf.tools.serviceGenerator.processors.AstProcessor;
 import org.eclipse.ecf.tools.serviceGenerator.processors.ResourcesProcessor;
 import org.eclipse.ecf.tools.serviceGenerator.processors.TemplateProcessor;
-import org.eclipse.ecf.tools.servicegenerator.Activator;
-import org.eclipse.ecf.tools.servicegenerator.utils.AsyncProperties;
-import org.eclipse.ecf.tools.servicegenerator.utils.Logger;
+import org.eclipse.ecf.tools.serviceGenerator.utils.AsyncProperties;
+import org.eclipse.ecf.tools.serviceGenerator.utils.Logger;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.dom.TypeDeclaration;

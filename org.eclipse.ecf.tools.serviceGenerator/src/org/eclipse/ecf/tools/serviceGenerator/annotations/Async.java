@@ -5,7 +5,7 @@
 * available at http://www.eclipse.org/legal/epl-v10.html
 *
 ******************************************************************************/
-package org.eclipse.ecf.tools.serviceGenerator.annotaions;
+package org.eclipse.ecf.tools.serviceGenerator.annotations;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

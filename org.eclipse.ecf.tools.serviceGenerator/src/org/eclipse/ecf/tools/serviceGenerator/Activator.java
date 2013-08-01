@@ -5,7 +5,7 @@
 * available at http://www.eclipse.org/legal/epl-v10.html
 *
 ******************************************************************************/
-package org.eclipse.ecf.tools.servicegenerator;
+package org.eclipse.ecf.tools.serviceGenerator;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
