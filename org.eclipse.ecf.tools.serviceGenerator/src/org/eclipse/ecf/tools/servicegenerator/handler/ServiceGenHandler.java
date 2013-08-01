@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.ecf.tools.serviceGenerator.processors.AstProcessor;
-import org.eclipse.ecf.tools.serviceGenerator.processors.IResourcesProcessor;
+import org.eclipse.ecf.tools.serviceGenerator.processors.ResourcesProcessor;
 import org.eclipse.ecf.tools.serviceGenerator.processors.TemplateProcessor;
 import org.eclipse.ecf.tools.servicegenerator.Activator;
 import org.eclipse.ecf.tools.servicegenerator.utils.AsyncProperties;
@@ -63,10 +63,10 @@ public class ServiceGenHandler  implements IActionDelegate{
           /*Getting the selected file as icompilationUnit*/
 		 ICompilationUnit icompilationUnit = getIcompilationunit(selection);
 		 /* getting java project associated with selected compilation unit, this need to create new units*/
-		 IJavaProject javaProject = IResourcesProcessor.getJavaProject(icompilationUnit);
+		 IJavaProject javaProject = ResourcesProcessor.getJavaProject(icompilationUnit);
 		 /*getting  the service type  1-Async Service and 2-sync service return 0 if this is not annotated using
 		  * @remote Service */
-         int serviceType = IResourcesProcessor.getServiceType(icompilationUnit);
+         int serviceType = ResourcesProcessor.getServiceType(icompilationUnit);
 		 
 		 if(serviceType!=0){
 			 /*JSL4 based processor new units generate by this processor */
@@ -75,8 +75,8 @@ public class ServiceGenHandler  implements IActionDelegate{
 			 TemplateProcessor templateProcessor = new TemplateProcessor(javaProject);
 			 
 			 /*getting selected icompilationUnit information*/
-			 String pacKagename =IResourcesProcessor.getPackageName(icompilationUnit);
-			 String interfaceName  = IResourcesProcessor.getInterfaceName(icompilationUnit);
+			 String pacKagename =ResourcesProcessor.getPackageName(icompilationUnit);
+			 String interfaceName  = ResourcesProcessor.getInterfaceName(icompilationUnit);
 			 
 			 /*creating new names for interface, package and Impl-clazz*/
 			 String generatedInterfaceName = createNewInterfaceName(serviceType, interfaceName);

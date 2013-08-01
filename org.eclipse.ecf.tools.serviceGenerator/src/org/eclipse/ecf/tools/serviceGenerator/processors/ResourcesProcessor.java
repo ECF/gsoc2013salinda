@@ -25,7 +25,7 @@ import org.eclipse.jdt.core.IPackageDeclaration;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
-public class IResourcesProcessor {
+public class ResourcesProcessor {
 	
  public static List<String> getImports(ICompilationUnit compilationUnit) throws JavaModelException {
 		List<String>  importsList = new ArrayList<String>();
