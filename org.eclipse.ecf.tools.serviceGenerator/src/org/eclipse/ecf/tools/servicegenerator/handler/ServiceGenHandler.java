@@ -36,13 +36,8 @@ public class ServiceGenHandler  implements IActionDelegate{
 	@Override
 	public void run(IAction arg0) {
 		if (selection != null) {
-			 try {
 				 clazzGen(selection);
-			} catch (Exception e) {
-			 
-			}
 		}
-		
 	}
 		  
 	@Override

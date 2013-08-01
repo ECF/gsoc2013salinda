@@ -15,6 +15,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.ecf.tools.servicegenerator.utils.AnnotaionTypes;
+import org.eclipse.ecf.tools.servicegenerator.utils.RServiceType;
 import org.eclipse.jdt.core.IAnnotatable;
 import org.eclipse.jdt.core.IAnnotation;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -27,7 +29,7 @@ import org.eclipse.jdt.core.JavaModelException;
 
 public class ResourcesProcessor {
 	
- public static List<String> getImports(ICompilationUnit compilationUnit) throws JavaModelException {
+ /*public static List<String> getImports(ICompilationUnit compilationUnit) throws JavaModelException {
 		List<String>  importsList = new ArrayList<String>();
 		IImportDeclaration[] imports = compilationUnit.getImports();
 		 for (IImportDeclaration iImportDeclaration : imports) {
@@ -39,7 +41,7 @@ public class ResourcesProcessor {
 			}
 		}
 		 return importsList;
-	}
+	}*/
  
  public static String getInterfaceName(ICompilationUnit icompilationUnit){
 	 String elementName = icompilationUnit.getElementName();
@@ -55,14 +57,14 @@ public class ResourcesProcessor {
 				IAnnotatable annotatable = (IAnnotatable)iType;
 				IAnnotation[] annotations = annotatable.getAnnotations();
 				for (IAnnotation iAnnotation : annotations) {
-					if("RemoteService".equals(iAnnotation.getElementName())){
+					if(AnnotaionTypes.RService.getStrCode().equals(iAnnotation.getElementName())){
 						IMemberValuePair[] memberValuePairs = iAnnotation.getMemberValuePairs();
 						 for (IMemberValuePair iMemberValuePair : memberValuePairs) {
 							   if("type".equals(iMemberValuePair.getMemberName())){
-							         if("Async".equals(iMemberValuePair.getValue().toString())){
-							        	 return 1;
-							         }else if ("sync".equals(iMemberValuePair.getValue().toString())){
-							        	 return 2;
+							         if(RServiceType.ASYNC.getStrCode().equals(iMemberValuePair.getValue().toString())){
+							        	 return RServiceType.ASYNC.getCode();
+							         }else if (RServiceType.SYNC.getStrCode().equals(iMemberValuePair.getValue().toString())){
+							        	 return RServiceType.SYNC.getCode();
 							         }
 							   }
 						}
@@ -71,7 +73,7 @@ public class ResourcesProcessor {
 			}
 		}
 		return 0;
-	}
+	} 
  
  public static String getClazzFQ(ICompilationUnit compilationUnit)
 			throws JavaModelException {
