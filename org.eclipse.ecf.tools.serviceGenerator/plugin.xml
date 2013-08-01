@@ -8,7 +8,7 @@
            <action
                         label="Generate R-service"
                         icon="icons/generate.png"
-                   class="org.eclipse.ecf.tools.servicegenerator.handler.ServiceGenHandler"
+                   class="org.eclipse.ecf.tools.serviceGenerator.handler.ServiceGenHandler"
                         id="org.eclipse.ecf.tools.servicegenerator.handlers">
             </action>
       </objectContribution>
