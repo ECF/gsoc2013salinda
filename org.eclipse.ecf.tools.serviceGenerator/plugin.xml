@@ -38,19 +38,26 @@
         <visibleWhen checkEnabled="false">
             <with variable="activeMenuSelection">
                <iterate ifEmpty="false" operator="and">
-               <or>  
+               <!--used OR opertaor becuase selected resource can be a project or package or file-->
+               <or> 
+                 <!-- used AND operator because selected resource should be a project also it should be a java project 
+                  so both condition should be satisfied to active the menu-->
                   <and>
+                  <!-- use to filer projects -->
                    <instanceof
                      value="org.eclipse.core.resources.IProject">
                   </instanceof>
+                   <!-- use to filer java projects by checking the project nature -->
                   <test
                     property="org.eclipse.core.resources.projectNature"
                     value=" org.eclipse.jdt.core.javanature">
                  </test>                 
                   </and>
+                  <!-- This Enable menu when user click on the Java files -->
                  <instanceof
                      value="org.eclipse.jdt.core.ICompilationUnit">
                   </instanceof>
+                    <!-- This Enable menu when user click on the package -->
                   <instanceof
                      value="org.eclipse.jdt.core.IPackageFragment">
                   </instanceof>
