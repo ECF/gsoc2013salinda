@@ -115,12 +115,12 @@ public class ServiceGenCommandHandler extends AbstractHandler  {
 	}
 
 	private String createImplePackageName(String pacKagename) {
-		String implPackgeName = pacKagename+".Imple";
+		String implPackgeName = pacKagename+".Impl";
 		return implPackgeName;
 	}
 
 	private String createNewImpleClazzName(String name) {
-		String impleName = name + "Imple";
+		String impleName = name + "Impl";
 		return impleName;
 	}
 
