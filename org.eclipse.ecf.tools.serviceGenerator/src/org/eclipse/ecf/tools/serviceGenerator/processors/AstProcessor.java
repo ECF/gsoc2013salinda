@@ -24,6 +24,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.Modifier.ModifierKeyword;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.NormalAnnotation;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
@@ -42,9 +43,11 @@ public class AstProcessor {
 	
 	private static final String ASYNC_ANOTATION= "org.eclipse.ecf.tools.serviceGenerator.annotations.Async";
 	private static final String REMOTE_SERVICE_ANOTATION="org.eclipse.ecf.tools.serviceGenerator.annotations.RemoteService";
+
 	private CompilationUnit origenalInterfaceUnit;
 	private CompilationUnit newAsyncInterfaceUnit;
 	private CompilationUnit newimplClazzUnit;
+	private CompilationUnit serviceRegisterUnit;
 	private MethodVisitor methodVisitor;
 	private AST ast;
     private Logger log;
@@ -61,10 +64,60 @@ public class AstProcessor {
 		 origenalInterfaceUnit = (CompilationUnit) parser.createAST(null);
 		 newAsyncInterfaceUnit = ast.newCompilationUnit();
 		 newimplClazzUnit = ast.newCompilationUnit();
+		 setServiceRegisterUnit(ast.newCompilationUnit());
 		 methodVisitor = new MethodVisitor();
 		 this.log = log;
 		
 	}
+	
+	public CompilationUnit getOrigenalInterfaceUnit() {
+		return origenalInterfaceUnit;
+	}
+
+	public void setOrigenalInterfaceUnit(CompilationUnit origenalInterfaceUnit) {
+		this.origenalInterfaceUnit = origenalInterfaceUnit;
+	}
+
+	public CompilationUnit getNewAsyncInterfaceUnit() {
+		return newAsyncInterfaceUnit;
+	}
+
+	public void setNewAsyncInterfaceUnit(CompilationUnit newAsyncInterfaceUnit) {
+		this.newAsyncInterfaceUnit = newAsyncInterfaceUnit;
+	}
+
+	public CompilationUnit getNewimplClazzUnit() {
+		return newimplClazzUnit;
+	}
+
+	public void setNewimplClazzUnit(CompilationUnit newimplClazzUnit) {
+		this.newimplClazzUnit = newimplClazzUnit;
+	}
+
+	public MethodVisitor getMethodVisitor() {
+		return methodVisitor;
+	}
+
+	public void setMethodVisitor(MethodVisitor methodVisitor) {
+		this.methodVisitor = methodVisitor;
+	}
+
+	public AST getAst() {
+		return ast;
+	}
+
+	public void setAst(AST ast) {
+		this.ast = ast;
+	}
+
+	public Logger getLog() {
+		return log;
+	}
+
+	public void setLog(Logger log) {
+		this.log = log;
+	}
+
 	
 	public CompilationUnit getNewunit() {
 		return newAsyncInterfaceUnit;
@@ -110,6 +163,13 @@ public class AstProcessor {
 			   newAsyncInterfaceUnit.setPackage(createPackage(packName));
 			   newimplClazzUnit.setPackage(createPackage(implePackName));
 	}
+	
+	public PackageDeclaration cretaePackage2(String packageName){
+		return createPackage(packageName);
+	}
+	
+	
+	
 
 	/**
 	 * New AST type declare for the interface and impl-clazzes  
@@ -136,6 +196,28 @@ public class AstProcessor {
 			}
 		return type;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public TypeDeclaration createType2(String typename, boolean isInterface,String supperclass,ModifierKeyword modifierKeyword) {
+		TypeDeclaration type=null;
+			type = ast.newTypeDeclaration();
+			type.setInterface(isInterface);
+			type.modifiers().add(ast.newModifier(modifierKeyword));
+			SimpleName newSimpleName = ast.newSimpleName(typename);
+			type.setName(newSimpleName);
+			if(supperclass!=null){
+				Name name = ast.newName(supperclass);
+				SimpleType superclassType = ast.newSimpleType(name);
+				if (isInterface) {
+					type.setSuperclassType(superclassType);
+				} else {
+					type.superInterfaceTypes().add(superclassType);
+				}
+			}
+		return type;
+	}
+	
+	
 	
 	/**
 	 * method signatures will be added to the interface and full method added to the impl-clazz
@@ -189,7 +271,7 @@ public class AstProcessor {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void createImports(CompilationUnit unit,List<String> extraImports) {
+	public void createImports(CompilationUnit unit,List<String> extraImports) {
 		List<ImportDeclaration> oldimports = origenalInterfaceUnit.imports();
 		   /*adding already existing imports in the interface*/
           for (ImportDeclaration importDeclaration : oldimports) {
@@ -217,7 +299,7 @@ public class AstProcessor {
 	 * @param isSync - true for sync methods false for all Async methods
 	 */
 	@SuppressWarnings("unchecked")
-	private void createMethod(TypeDeclaration type,
+	public void createMethod(TypeDeclaration type,
 			MethodDeclaration userMethodDec, List<Modifier> modifiers,boolean iscalback,boolean isBody,boolean isSync) {
 		 MethodDeclaration methodDeclaration = ast.newMethodDeclaration();
  
@@ -236,6 +318,12 @@ public class AstProcessor {
 		}
 		type.bodyDeclarations().add(methodDeclaration);
 	}
+	
+	public MethodDeclaration createMethod2() {
+		 MethodDeclaration methodDeclaration = ast.newMethodDeclaration();
+		return methodDeclaration;
+	}
+	
 
 	/**
 	 * Adding method Exceptions
@@ -479,4 +567,12 @@ public class AstProcessor {
           
          return importDeclaration;
 	}
+
+public CompilationUnit getServiceRegisterUnit() {
+	return serviceRegisterUnit;
+}
+
+public void setServiceRegisterUnit(CompilationUnit serviceRegisterUnit) {
+	this.serviceRegisterUnit = serviceRegisterUnit;
+}
 }
