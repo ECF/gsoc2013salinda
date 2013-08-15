@@ -43,5 +43,20 @@ public class TemplateProcessor {
 		 
 		javaProject.getProject().refreshLocal(IResource.DEPTH_INFINITE,new NullProgressMonitor());
 	}
+	
+	public void generateStrTemplate(String unit,String packgeName,String newClazz) throws CoreException {
+		IPackageFragment sourcePackage = root.createPackageFragment(packgeName, false, null);
+		
+		try{
+		    sourcePackage.createCompilationUnit(newClazz+".java",unit , false, null);
+		}catch(Exception e){
+			  ICompilationUnit compilationUnit = sourcePackage.getCompilationUnit(newClazz+".java");
+			  compilationUnit.delete(false, new NullProgressMonitor());
+			  javaProject.getProject().refreshLocal(IResource.DEPTH_INFINITE,new NullProgressMonitor());
+			  sourcePackage.createCompilationUnit(newClazz+".java",unit , false, null);
+		}
+		 
+		javaProject.getProject().refreshLocal(IResource.DEPTH_INFINITE,new NullProgressMonitor());
+	}
 
 }

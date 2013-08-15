@@ -16,14 +16,15 @@ public class ServiceRegistrionConstants {
 
 	static List<String> imports = new  ArrayList<String>();
 	static{
-		imports.add("org.eclipse.core.runtime.Platform");
+		//imports.add("org.eclipse.core.runtime.Platform");
 		imports.add("org.eclipse.ecf.core.IContainer");
 		imports.add("org.eclipse.ecf.core.IContainerManager");
-		imports.add("org.eclipse.ecf.core.identity.ID");
+		//imports.add("org.eclipse.ecf.core.identity.ID");
 		imports.add("org.eclipse.ecf.remoteservice.IRemoteServiceContainerAdapter");
-		imports.add("org.eclipse.ecf.remoteservice.IRemoteServiceID");
-		imports.add("org.eclipse.ecf.remoteservice.IRemoteServiceRegistration");
-		
+		//imports.add("org.eclipse.ecf.remoteservice.IRemoteServiceID");
+		//imports.add("org.eclipse.ecf.remoteservice.IRemoteServiceRegistration");
+		imports.add("org.osgi.framework.BundleContext");
+		imports.add("org.osgi.util.tracker.ServiceTracker");
 	}
 	public static List<String> getImports(){
 			return imports;

@@ -17,6 +17,7 @@ import org.eclipse.ecf.tools.serviceGenerator.Activator;
 import org.eclipse.ecf.tools.serviceGenerator.processors.AstProcessor;
 import org.eclipse.ecf.tools.serviceGenerator.processors.ResourcesProcessor;
 import org.eclipse.ecf.tools.serviceGenerator.processors.TemplateProcessor;
+import org.eclipse.ecf.tools.serviceGenerator.templates.ServiceRegClazzTemplate;
 import org.eclipse.ecf.tools.serviceGenerator.utils.AsyncProperties;
 import org.eclipse.ecf.tools.serviceGenerator.utils.Logger;
 import org.eclipse.ecf.tools.serviceGenerator.utils.ServiceRegistrionConstants;
@@ -26,6 +27,7 @@ import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.PrimitiveType;
@@ -124,7 +126,7 @@ public class ServiceGenCommandHandler extends AbstractHandler  {
 			 for (String string : regimports) {
 				 strImports.add(string);
 			 }
-			 
+			 astProcessor.createImports(astProcessor.getServiceRegisterUnit(), strImports);
 			 
 			 /*adding methods signatures and methods for interface and impl-clazz*/
 			 astProcessor.addMethods(createdType,createdImpleType,serviceType);
@@ -146,24 +148,29 @@ public class ServiceGenCommandHandler extends AbstractHandler  {
 			 
 			 
 			 ExpressionStatement newExpressionStatement = astProcessor.getAst().newExpressionStatement(newStringLiteral);
+			 MethodInvocation newMethodInvocation = astProcessor.getAst().newMethodInvocation();
 			 
 			 
+		/*	 newMethodInvocation.setExpression(newExpressionStatement);
 			 newBlock.statements().add(newExpressionStatement);
+			 newBlock.statements().add(newMethodInvocation);*/
+			 createRegMethod.setBody(newBlock);
 			 
 			 createRegType2.bodyDeclarations().add(createRegMethod);
-			 serviceRegisterUnit.types().add(createRegType2);
+			 astProcessor.getServiceRegisterUnit().types().add(createRegType2);
 			 
-			 
+			 String classTemplete = ServiceRegClazzTemplate.getClassTemplete(implPackgeName, regClazzName, strImports, interfaceName);
 			 /*for a Async-service create both Async interface and imple-clazz*/
 			 if(serviceType==1){
 			 templateProcessor.generateAstTemplate(astProcessor.getNewunit(), pacKagename, generatedInterfaceName);
 			 templateProcessor.generateAstTemplate(astProcessor.getImpleunit(), implPackgeName, impleName);
-			 templateProcessor.generateAstTemplate(serviceRegisterUnit,regPackgeName, regClazzName);
+			 //templateProcessor.generateAstTemplate(serviceRegisterUnit,regPackgeName, regClazzName);
 			 
 			 }else{
 				 /*for a sync-service imple-clazz Only*/
 				 templateProcessor.generateAstTemplate(astProcessor.getImpleunit(), implPackgeName, impleName);
-				 templateProcessor.generateAstTemplate(serviceRegisterUnit,regPackgeName, regClazzName);
+				// templateProcessor.generateAstTemplate(serviceRegisterUnit,regPackgeName, regClazzName);
+				 templateProcessor.generateStrTemplate(classTemplete, implPackgeName, regClazzName);
 			 }
 			 return true;
 		 }else{
