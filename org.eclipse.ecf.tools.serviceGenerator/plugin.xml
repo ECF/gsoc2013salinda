@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-  <!--extension point="org.eclipse.ui.popupMenus">
-      <objectContribution
-              objectClass="org.eclipse.jdt.core.ICompilationUnit" 
-                    id="org.eclipse.ecf.tools.servicegenerator.handlers">
-           <action
-                        label="Generate R-service"
-                        icon="icons/generate.png"
-                   class="org.eclipse.ecf.tools.serviceGenerator.handler.ServiceGenHandler"
-                        id="org.eclipse.ecf.tools.servicegenerator.handlers">
-            </action>
-      </objectContribution>
-      
-</extension--> 
-<extension
+	<extension
+         point="org.eclipse.ui.newWizards">
+         <category
+	   		id = "org.eclipse.ecf.tools.serviceGenerator.ecf"
+	   		name="ECF">
+		</category>
+      	<wizard
+            name="ECF Remote Service Client Gen Wizard"
+            class="org.eclipse.ecf.tools.serviceGenerator.wizards.RemoteServiceClientGenWizard"
+            id="org.eclipse.ecf.tools.serviceGenerator.wizards.RemoteServiceClientGenWizard"
+            project="true"
+            category="org.eclipse.ecf.tools.serviceGenerator.ecf"
+	        icon="icons/generate.png" 
+            >
+      	</wizard>
+   </extension>
+	<extension
        point="org.eclipse.ui.commands">
-    <command
+    	<command
         description="Generate R-service files"
         id="org.eclipse.ecf.tools.serviceGenerator.file.generator"
         name="Generate R-service">
-  	</command>
- </extension>
+  		</command>
+ 	</extension>
 
     <extension
        point="org.eclipse.ui.handlers">
