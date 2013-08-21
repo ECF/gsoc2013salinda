@@ -27,8 +27,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionDelegate;
 import org.eclipse.ui.PlatformUI;
  
-
-
 public class ServiceGenHandler  implements IActionDelegate{
 
 	private IStructuredSelection selection;
