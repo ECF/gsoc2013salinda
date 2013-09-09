@@ -19,6 +19,8 @@ import org.eclipse.swt.widgets.Text;
 
 public class RemoteServiceClientGenWizardPage extends WizardPage {
 	private Text projectName;
+	private Text packageName;
+	private Text className;
 	  private Composite container;
 
 	  public RemoteServiceClientGenWizardPage() {
@@ -33,33 +35,54 @@ public class RemoteServiceClientGenWizardPage extends WizardPage {
 	    GridLayout layout = new GridLayout();
 	    container.setLayout(layout);
 	    layout.numColumns = 2;
-	    Label label1 = new Label(container, SWT.NONE);
-	    label1.setText("Project name ");
 
-	    projectName = new Text(container, SWT.BORDER | SWT.SINGLE);
-	    projectName.setText("");
-	    projectName.addKeyListener(new KeyListener() {
+	    
+	    projectName = createTextFeild("Project name:");
+	    packageName = createTextFeild("Package:");
+	    className = createTextFeild("Class:");
+	    setControl(container);
+	    setPageComplete(false);
+	  }
 
+	private Text createTextFeild(String name) {
+		Label label2 = new Label(container, SWT.NONE);
+	    label2.setText(name);
+	    Text temp = new Text(container, SWT.BORDER | SWT.SINGLE);
+	    temp.setText("");
+	    temp.addKeyListener(new KeyListener() {
 	      @Override
 	      public void keyPressed(KeyEvent e) {
 	      }
 
 	      @Override
 	      public void keyReleased(KeyEvent e) {
-	        if (!projectName.getText().isEmpty()) {
+	    	  if(packageName!=null && projectName!=null && className!=null){
+	        if (!packageName.getText().isEmpty()&&!projectName.getText().isEmpty()&&!className.getText().isEmpty()) {
 	          setPageComplete(true);
-
+	        }else{
+	           setPageComplete(false);
+	        }
 	        }
 	      }
-
 	    });
 	    GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-	    projectName.setLayoutData(gd);
-	    setControl(container);
-	    setPageComplete(true);
-	  }
+	    temp.setLayoutData(gd);
+	    
+	    return temp;
+	}
 
+	  
+	  
 	  public String getProjectName() {
 	    return projectName.getText();
 	  }
+	  
+	  public String getPackageName() {
+		    return packageName.getText();
+       }
+	  
+	  public String getclassName() {
+		    return className.getText();
+     }
+	  
 }

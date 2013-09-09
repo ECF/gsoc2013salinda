@@ -29,7 +29,6 @@ public class ServiceRegClazzTemplate {
 					}
 					buffer.append("\n\n");
 					buffer.append("public class " + className +"{ \n\n" );
-					//buffer.append(" \n\t");
 					buffer.append("private ServiceTracker containerManagerServiceTracker;\n\n");
 					
 					buffer.append("public void register(String interfaceName, Object classInstance,String containerDescription,BundleContext context) { \n\t\t");
@@ -39,7 +38,6 @@ public class ServiceRegClazzTemplate {
 					buffer.append("IRemoteServiceContainerAdapter containerAdapter = (IRemoteServiceContainerAdapter) container.getAdapter(IRemoteServiceContainerAdapter.class);\n\t");
 					buffer.append("containerAdapter.registerRemoteService(new String[] { interfaceName }, classInstance, null);\n\t");
 					buffer.append("} catch (Exception e) {\n\n\t");
-			               // TODO Auto-generated catch block
 					buffer.append("} \n\n\t");
 					buffer.append("}\n");
 					buffer.append("private IContainerManager getContainerManagerService(BundleContext context) { \n\n\t");

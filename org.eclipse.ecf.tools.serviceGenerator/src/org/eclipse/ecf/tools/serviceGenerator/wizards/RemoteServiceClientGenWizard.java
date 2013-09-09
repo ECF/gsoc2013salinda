@@ -7,6 +7,7 @@
 ******************************************************************************/
 package org.eclipse.ecf.tools.serviceGenerator.wizards;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +19,12 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.ecf.tools.serviceGenerator.templates.ServiceClientTemplate;
 import org.eclipse.ecf.tools.serviceGenerator.utils.JavaProjectUtils;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
@@ -48,6 +54,19 @@ public class RemoteServiceClientGenWizard extends Wizard implements INewWizard{
 			project.create(progressMonitor);
 			project.open(progressMonitor);
 			IFolder  srcFolder= getWorkspaceFolder(project, "src", "main","java");
+			JavaProjectUtils.createFolder(srcFolder);
+			IJavaProject iJavaProject = JavaCore.create(project);
+	     	IPackageFragmentRoot rootpackage = iJavaProject.getPackageFragmentRoot(srcFolder);
+	     	IPackageFragment sourcePackage = rootpackage.createPackageFragment(page.getPackageName(), false, null);
+	     	String template = ServiceClientTemplate.createServiceConsumerClassTemplete(page.getPackageName(), page.getclassName());
+			sourcePackage.createCompilationUnit(page.getclassName()+".java", template, false, null);
+			IFolder  metaInf = getWorkspaceFolder(project, "META-INF");
+			if (!metaInf.exists()) {
+				metaInf.create(false, true, null);
+			}
+			String createManifestFileTemplate = ServiceClientTemplate.createManifestFileTemplate(page.getProjectName());
+			File  menifest = new File(metaInf.getLocation().toFile(),"MANIFEST.MF");
+			JavaProjectUtils.createFile(menifest, createManifestFileTemplate);
 			JavaProjectUtils.addJavaSupportAndSourceFolder(project, srcFolder);
 			project.refreshLocal(IResource.DEPTH_INFINITE,new NullProgressMonitor());
 			return true;

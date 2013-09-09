@@ -1,0 +1,67 @@
+package
+
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.ecf.core.IContainer;
+import org.eclipse.ecf.core.IContainerManager;
+import org.eclipse.ecf.core.identity.IDFactory;
+import org.eclipse.ecf.remoteservice.IRemoteService;
+import org.eclipse.ecf.remoteservice.IRemoteServiceContainerAdapter;
+import org.eclipse.ecf.remoteservice.IRemoteServiceReference;
+import org.eclipse.ecf.remoteservice.testframework.Activator;
+import org.eclipse.ui.console.MessageConsoleStream;
+import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
+
+public class ServiceConsumerClassName{
+
+	private static BundleContext context;
+	
+	public  String serviceURL;
+	private String  interfaceName;
+	private String containerDescription; 
+	
+	private ServiceTracker containerManagerServiceTracker;
+	private IContainer container;
+	private IRemoteService remoteService;
+  
+	
+	public ServiceConsumerClassName()throws Exception{
+		createClient();
+	}
+
+	private void createClient()throws Exception{
+		 
+			context = Platform.getBundle(Activator.PLUGIN_ID).getBundleContext(); 
+			IContainerManager containerManager = getContainerManagerService();
+			container = containerManager.getContainerFactory().createContainer(containerDescription);
+			IRemoteServiceContainerAdapter containerAdapter = (IRemoteServiceContainerAdapter) container
+					.getAdapter(IRemoteServiceContainerAdapter.class);
+			IRemoteServiceReference[] helloReferences = containerAdapter
+					.getRemoteServiceReferences(IDFactory.getDefault().createID(container.getConnectNamespace(),
+							serviceURL), interfaceName, null);
+			remoteService = containerAdapter.getRemoteService(helloReferences[0]);
+ 
+	}
+	
+   private IContainerManager getContainerManagerService() {
+		if (containerManagerServiceTracker == null) {
+	    containerManagerServiceTracker = new ServiceTracker(context, IContainerManager.class.getName(),null);
+		containerManagerServiceTracker.open();
+		}
+		return (IContainerManager) containerManagerServiceTracker.getService();
+	}
+	
+	public IRemoteService getRemoteService() {
+		return remoteService;
+	}
+	
+	public void setContainerDescription(String containerDescription) {
+		this.containerDescription = containerDescription;
+	}
+
+
+	public String getContainerDescription() {
+		return containerDescription;
+	}
+ 
+}

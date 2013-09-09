@@ -7,6 +7,13 @@
 ******************************************************************************/
 package org.eclipse.ecf.tools.serviceGenerator.utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -18,15 +25,19 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Plugin;
+import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.osgi.baseadaptor.loader.ClasspathEntry;
 
 public class JavaProjectUtils {
 	public static final String JAVA_NATURE_ID="org.eclipse.jdt.core.javanature";
+	public static final String PDE_NATURE_ID="org.eclipse.pde.PluginNature";
 	
 	public static void addJavaSupportAndSourceFolder(IProject project, IFolder sourceFolder) throws CoreException,
 		JavaModelException {
@@ -39,7 +50,8 @@ public class JavaProjectUtils {
 		 
 		 IProjectNature nature = project.getNature(JAVA_NATURE_ID);
 		 if(nature==null){
-		    addNatureToProject(project, true, JAVA_NATURE_ID);
+		    addNatureToProject(project, true, PDE_NATURE_ID,JAVA_NATURE_ID);
+		    
 		 }
 		IJavaProject javaProject = JavaCore.create(project);
 		IFolder targetFolder = project.getFolder("target");
@@ -77,7 +89,9 @@ public class JavaProjectUtils {
 			if (ClASSPATH_ENTRY_KIND!=classpathEntry.getEntryKind()) {
 				validEntries.add(classpathEntry);
 			} 
+			
 		}
+ 
 		validEntries.add(JavaCore.newSourceEntry(root.getPath()));
 		javaProject.setRawClasspath(validEntries.toArray(new IClasspathEntry[] {}),null);
 	}
@@ -113,5 +127,19 @@ public class JavaProjectUtils {
 		description.setNatureIds(list);
 		project.setDescription(description, null);
 	}
-	
+   public static void createFile(File destinationFile, String content) throws IOException{
+	    	//Create parent folder if it doesn't exist 
+	    	if (!(destinationFile.getParentFile()==null || destinationFile.getParentFile().exists())){
+	    		destinationFile.getParentFile().mkdirs();
+	    	}
+	        InputStream dataStream=new ByteArrayInputStream(content.getBytes());
+	        FileOutputStream out = new FileOutputStream(destinationFile);
+	        byte[] data=new byte[1024];
+	        int readLength;
+	        while((readLength=dataStream.read(data))>0){
+	        	out.write(data,0,readLength);
+	        }
+	        dataStream.close();
+	        out.close();
+	    }
 }
