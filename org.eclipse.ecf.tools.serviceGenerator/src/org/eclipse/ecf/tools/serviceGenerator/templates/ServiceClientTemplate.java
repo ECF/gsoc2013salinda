@@ -18,6 +18,8 @@ public class ServiceClientTemplate {
 			fileContent = fileContent.replace("package","");
 		}
 		fileContent = fileContent.replace("ServiceConsumerClassName", className);
+		//fileContent = fileContent.replace("serviceinterfaceName", className);
+		//fileContent = fileContent.replace("containerDescription", className);
 		return fileContent;
 	}
 

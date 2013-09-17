@@ -17,6 +17,55 @@
             >
       	</wizard>
    </extension>
+   <extension
+       point="org.eclipse.ui.commands">
+    	<command
+        description="Generate R-service client files"
+        id="org.eclipse.ecf.tools.clientGenerator.file.generator"
+        name="Generate R-service client">
+  		</command>
+ 	</extension>
+
+    <extension
+       point="org.eclipse.ui.handlers">
+    <handler
+        class="org.eclipse.ecf.tools.serviceGenerator.handler.ClientGenCommandHandler"
+        commandId="org.eclipse.ecf.tools.clientGenerator.file.generator">
+  		</handler>
+ </extension>
+<extension point="org.eclipse.ui.menus">
+ <menuContribution locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+     <command
+           commandId="org.eclipse.ecf.tools.clientGenerator.file.generator"
+           style="push">
+        <visibleWhen checkEnabled="false">
+            <with variable="activeMenuSelection">
+               <iterate ifEmpty="false" operator="and">
+               <!--used OR opertaor becuase selected resource can be a project or package or file-->
+               <or> 
+                 <!-- used AND operator because selected resource should be a project also it should be a java project 
+                  so both condition should be satisfied to active the menu-->
+                  <and>
+                  <!-- use to filer projects -->
+                   <instanceof
+                     value="org.eclipse.core.resources.IProject">
+                  </instanceof>
+                   <!-- use to filer java projects by checking the project nature -->
+                  <test
+                    property="org.eclipse.core.resources.projectNature"
+                    value=" org.eclipse.jdt.core.javanature">
+                 </test>                 
+                  </and>
+              </or>    
+               </iterate>  
+           </with>
+        </visibleWhen>
+     </command>
+  </menuContribution>
+</extension> 
+   
+   
+   <!-- Service File Generating Commands -->
 	<extension
        point="org.eclipse.ui.commands">
     	<command

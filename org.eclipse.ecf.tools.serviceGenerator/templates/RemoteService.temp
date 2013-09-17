@@ -38,7 +38,7 @@ public class ServiceConsumerClassName{
 					.getAdapter(IRemoteServiceContainerAdapter.class);
 			IRemoteServiceReference[] helloReferences = containerAdapter
 					.getRemoteServiceReferences(IDFactory.getDefault().createID(container.getConnectNamespace(),
-							serviceURL), interfaceName, null);
+							serviceURL), serviceinterfaceName, null);
 			remoteService = containerAdapter.getRemoteService(helloReferences[0]);
  
 	}

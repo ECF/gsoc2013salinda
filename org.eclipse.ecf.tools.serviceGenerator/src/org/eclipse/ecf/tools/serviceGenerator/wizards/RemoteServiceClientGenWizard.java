@@ -19,6 +19,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.ecf.tools.serviceGenerator.handler.ClientGenCommandHandler;
 import org.eclipse.ecf.tools.serviceGenerator.templates.ServiceClientTemplate;
 import org.eclipse.ecf.tools.serviceGenerator.utils.JavaProjectUtils;
 import org.eclipse.jdt.core.IJavaProject;
@@ -48,26 +49,28 @@ public class RemoteServiceClientGenWizard extends Wizard implements INewWizard{
 	@Override
 	public boolean performFinish() {
 		 try{
-		    IProgressMonitor progressMonitor = new NullProgressMonitor();
-		    IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-			IProject project = root.getProject(page.getProjectName());
-			project.create(progressMonitor);
-			project.open(progressMonitor);
-			IFolder  srcFolder= getWorkspaceFolder(project, "src", "main","java");
-			JavaProjectUtils.createFolder(srcFolder);
+			IProject project = ClientGenCommandHandler.getProject();
+		//	project.create(progressMonitor);
+		//	project.open(progressMonitor);
+			
+			
+			//IFolder  srcFolder= getWorkspaceFolder(project, "src");
+		//	JavaProjectUtils.createFolder(srcFolder);
 			IJavaProject iJavaProject = JavaCore.create(project);
+			IFolder srcFolder = iJavaProject.getProject().getFolder("src");
+
 	     	IPackageFragmentRoot rootpackage = iJavaProject.getPackageFragmentRoot(srcFolder);
 	     	IPackageFragment sourcePackage = rootpackage.createPackageFragment(page.getPackageName(), false, null);
 	     	String template = ServiceClientTemplate.createServiceConsumerClassTemplete(page.getPackageName(), page.getclassName());
 			sourcePackage.createCompilationUnit(page.getclassName()+".java", template, false, null);
-			IFolder  metaInf = getWorkspaceFolder(project, "META-INF");
+			/*IFolder  metaInf = getWorkspaceFolder(project, "META-INF");
 			if (!metaInf.exists()) {
 				metaInf.create(false, true, null);
 			}
 			String createManifestFileTemplate = ServiceClientTemplate.createManifestFileTemplate(page.getProjectName());
 			File  menifest = new File(metaInf.getLocation().toFile(),"MANIFEST.MF");
 			JavaProjectUtils.createFile(menifest, createManifestFileTemplate);
-			JavaProjectUtils.addJavaSupportAndSourceFolder(project, srcFolder);
+			JavaProjectUtils.addJavaSupportAndSourceFolder(project, srcFolder);*/
 			project.refreshLocal(IResource.DEPTH_INFINITE,new NullProgressMonitor());
 			return true;
 		 }catch(Exception e){
