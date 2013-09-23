@@ -1,55 +1,33 @@
+/*******************************************************************************
+* Copyright (c) 2013 Salinda Jayawardana. All rights reserved. This
+* program and the accompanying materials are made available under the terms of
+* the Eclipse Public License v1.0 which accompanies this distribution, and is
+* available at http://www.eclipse.org/legal/epl-v10.html
+*
+******************************************************************************/
 package org.eclipse.ecf.tools.serviceGenerator.templates;
 
 import java.io.File;
 
 import org.eclipse.ecf.tools.serviceGenerator.utils.FileUtils;
+import org.eclipse.ecf.tools.serviceGenerator.utils.TemplateUtilsImpl;
 import org.eclipse.ecf.tools.serviceGenerator.utils.TemplateUtil;
 
 
 public class ServiceClientTemplate {
 	
-	public static String createServiceConsumerClassTemplete(String packgeName,String className) throws Exception{
+	public static String createServiceConsumerClassTemplete(String projectName,String packgeName,String className,String interfaceName) throws Exception{
 
-		File resourceFile = new ServiceClientTemplateUtils().getResourceFile("templates/RemoteService.temp");
+		File resourceFile = new TemplateUtilsImpl().getResourceFile("templates/RemoteClient.temp");
 		String fileContent = FileUtils.getContentAsString(resourceFile);
 		if(!"".equals(packgeName)){
 		fileContent = fileContent.replace("package", "package " + packgeName + ";");
 		}else{
 			fileContent = fileContent.replace("package","");
 		}
+		fileContent = fileContent.replace("serviceinterfaceName", interfaceName);
 		fileContent = fileContent.replace("ServiceConsumerClassName", className);
-		//fileContent = fileContent.replace("serviceinterfaceName", className);
-		//fileContent = fileContent.replace("containerDescription", className);
+		fileContent = fileContent.replace("projectNameoftheActivator", projectName);
 		return fileContent;
-	}
-
-
-	public static String createManifestFileTemplate(String symbolicName){
-		StringBuffer buffer = new StringBuffer();   
-        buffer.append("Manifest-Version: 1.0 \n");
-        buffer.append("Bundle-ActivationPolicy: lazy \n");
-        buffer.append("Bundle-Name: ");
-        buffer.append(symbolicName);
-        buffer.append("\n");
-        buffer.append("Bundle-Version: ");
-        buffer.append("1.0");
-        buffer.append("\n");
-        buffer.append("Bundle-Activator: ");
-        buffer.append(symbolicName+".Activator");
-        buffer.append("\n");
-        buffer.append("Bundle-ManifestVersion: 2");
-        buffer.append("\n");
-        buffer.append("Carbon-Component: UIBundle");
-        buffer.append("\n");
-        buffer.append("Import-Package: org.osgi.framework;");
-        buffer.append("version=");
-        buffer.append("\"");
-        buffer.append("1.3.0");
-        buffer.append("\"");
-        buffer.append("\n");
-        buffer.append("Bundle-SymbolicName: ");
-        buffer.append(symbolicName);
-        buffer.append(";singleton:=true\n");
-        return buffer.toString();
 	}
 }

@@ -40,9 +40,11 @@ import org.eclipse.jdt.core.dom.WildcardType;
 
 
 public class AstProcessor {
-	
+	/*following imports should be removed frome the generated clazz*/
 	private static final String ASYNC_ANOTATION= "org.eclipse.ecf.tools.serviceGenerator.annotations.Async";
 	private static final String REMOTE_SERVICE_ANOTATION="org.eclipse.ecf.tools.serviceGenerator.annotations.RemoteService";
+	private static final String ASYNC_TYPE= "org.eclipse.ecf.tools.serviceGenerator.annotations.AsyncType";
+	private static final String AREMOTE_SERVICE_ANOTATION="org.eclipse.ecf.tools.serviceGenerator.annotations.AsyncRemoteService";
 
 	private CompilationUnit origenalInterfaceUnit;
 	private CompilationUnit newAsyncInterfaceUnit;
@@ -279,7 +281,7 @@ public class AstProcessor {
         	   String fqn = name.getFullyQualifiedName();
         	   /*Removing imports related to annotations*/
         	   if(!ASYNC_ANOTATION.equals(fqn)
-        			   &&!REMOTE_SERVICE_ANOTATION.equals(fqn)){
+        			   &&!REMOTE_SERVICE_ANOTATION.equals(fqn)&&!ASYNC_TYPE.equals(fqn)&&!AREMOTE_SERVICE_ANOTATION.equals(fqn)){
         		   unit.imports().add(getImportDec(fqn));
         	   }
 		}

@@ -18,6 +18,7 @@ import org.eclipse.ecf.tools.serviceGenerator.processors.AstProcessor;
 import org.eclipse.ecf.tools.serviceGenerator.processors.ResourcesProcessor;
 import org.eclipse.ecf.tools.serviceGenerator.processors.TemplateProcessor;
 import org.eclipse.ecf.tools.serviceGenerator.templates.ServiceRegClazzTemplate;
+import org.eclipse.ecf.tools.serviceGenerator.utils.Annotaions;
 import org.eclipse.ecf.tools.serviceGenerator.utils.AsyncProperties;
 import org.eclipse.ecf.tools.serviceGenerator.utils.Logger;
 import org.eclipse.ecf.tools.serviceGenerator.utils.ServiceRegistrionConstants;
@@ -73,7 +74,7 @@ public class ServiceGenCommandHandler extends AbstractHandler  {
 		  * @remote Service */
          int serviceType = ResourcesProcessor.getServiceType(icompilationUnit);
 		 
-		 if(serviceType!=0){
+		 if(serviceType==Annotaions.RService.getCode()||serviceType==Annotaions.ARService.getCode()){
 			 /*JSL4 based processor new units generate by this processor */
 			 AstProcessor astProcessor = new AstProcessor(icompilationUnit,log);
 			 /*This is used to serialize the new compilation units created by astprocessor */
@@ -158,15 +159,15 @@ public class ServiceGenCommandHandler extends AbstractHandler  {
 			 
 			 createRegType2.bodyDeclarations().add(createRegMethod);
 			 astProcessor.getServiceRegisterUnit().types().add(createRegType2);
-			 
-			 String classTemplete = ServiceRegClazzTemplate.getClassTemplete(implPackgeName, regClazzName, strImports, interfaceName);
+			 		  
+			 String classTemplete = ServiceRegClazzTemplate.createServiceRegisterTemplete(javaProject.getElementName(),
+					 implPackgeName, regClazzName, generatedInterfaceName, pacKagename,impleName,javaProject.getProject());
 			 /*for a Async-service create both Async interface and imple-clazz*/
-			 if(serviceType==1){
+			 if(serviceType==Annotaions.ARService.getCode()){
 			 templateProcessor.generateAstTemplate(astProcessor.getNewunit(), pacKagename, generatedInterfaceName);
 			 templateProcessor.generateAstTemplate(astProcessor.getImpleunit(), implPackgeName, impleName);
-			 //templateProcessor.generateAstTemplate(serviceRegisterUnit,regPackgeName, regClazzName);
-			 
-			 }else{
+			 templateProcessor.generateStrTemplate(classTemplete, implPackgeName, regClazzName);
+			 }else if(serviceType==Annotaions.RService.getCode()){
 				 /*for a sync-service imple-clazz Only*/
 				 templateProcessor.generateAstTemplate(astProcessor.getImpleunit(), implPackgeName, impleName);
 				// templateProcessor.generateAstTemplate(serviceRegisterUnit,regPackgeName, regClazzName);
@@ -193,9 +194,9 @@ public class ServiceGenCommandHandler extends AbstractHandler  {
 	}
 
 	private String createNewInterfaceName(int serviceType, String interfaceName) {
-		if(serviceType==1){
+		if(serviceType==Annotaions.ARService.getCode()){
 		      return interfaceName + "Async";
-		 }else if(serviceType==2){
+		 }else if(serviceType==Annotaions.RService.getCode()){
 			 return interfaceName;
 		 }
 		return null;

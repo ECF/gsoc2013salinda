@@ -8,7 +8,7 @@
 package org.eclipse.ecf.tools.serviceGenerator.utils;
 
 public enum Annotaions {
-	RService(1,"RemoteService"),ASYNC_METHOD(2,"Async");
+	ARService(1,"AsyncRemoteService"),RService(2,"RemoteService"),ASYNC_METHOD1(2,"Async");
 	 
 	 private int code;
 	 private String strCode;

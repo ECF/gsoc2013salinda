@@ -7,51 +7,50 @@
 ******************************************************************************/
 package org.eclipse.ecf.tools.serviceGenerator.templates;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.ecf.tools.serviceGenerator.utils.FileUtils;
+import org.eclipse.ecf.tools.serviceGenerator.utils.TemplateUtilsImpl;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class ServiceRegClazzTemplate {
-	public static String getClassTemplete(String packgeName,String className,List<String> imports,String interfaceName){
-		   
-		try{
-					StringBuffer buffer = new StringBuffer();
-					if(!"".equals(packgeName)){
-						buffer.append("package ");
-						buffer.append(packgeName);
-						buffer.append(";");
-						}
-					buffer.append("\n");
-					for (String strImport : imports) {
-						buffer.append("\nimport "+strImport+";");
-					}
-					buffer.append("\n\n");
-					buffer.append("public class " + className +"{ \n\n" );
-					buffer.append("private ServiceTracker containerManagerServiceTracker;\n\n");
-					
-					buffer.append("public void register(String interfaceName, Object classInstance,String containerDescription,BundleContext context) { \n\t\t");
-					buffer.append("try {\n\n\t");
-					buffer.append("IContainerManager containerManager = getContainerManagerService(context);\n\t");
-					buffer.append("IContainer container= containerManager.getContainerFactory().createContainer(containerDescription);\n\t");					 
-					buffer.append("IRemoteServiceContainerAdapter containerAdapter = (IRemoteServiceContainerAdapter) container.getAdapter(IRemoteServiceContainerAdapter.class);\n\t");
-					buffer.append("containerAdapter.registerRemoteService(new String[] { interfaceName }, classInstance, null);\n\t");
-					buffer.append("} catch (Exception e) {\n\n\t");
-					buffer.append("} \n\n\t");
-					buffer.append("}\n");
-					buffer.append("private IContainerManager getContainerManagerService(BundleContext context) { \n\n\t");
-					buffer.append("if (containerManagerServiceTracker == null) {\n\t");
-					buffer.append("containerManagerServiceTracker = new ServiceTracker(context, IContainerManager.class.getName(),null);\n\n\t");
-					buffer.append("containerManagerServiceTracker.open();");
-					buffer.append("}\n\t");
-					buffer.append("return (IContainerManager) containerManagerServiceTracker.getService();\n\t");
-					buffer.append("}\n\t");
-					buffer.append("}\n\t");
-					return buffer.toString();
-	            }catch (Exception e){
-	           
-	              return"";
-	            }
+	
+	public static String createServiceRegisterTemplete(String projectName,String packgeName,String className,
+			String interfaceName,String interfacePkg,String serviceImpleClazz,IProject iProject) throws Exception{
+
+		File resourceFile = new TemplateUtilsImpl().getResourceFile("templates/Register.temp");
+		String fileContent = FileUtils.getContentAsString(resourceFile);
+		if(!"".equals(packgeName)){
+		fileContent = fileContent.replace("package", "package " + packgeName + ";");
+		}else{
+			fileContent = fileContent.replace("package","");
 		}
+		fileContent = fileContent.replace("ServiceRegisterClassName", className);
+		fileContent = fileContent.replace("projectNameoftheActivator", projectName);
+		fileContent = fileContent.replace("serviceInterfacePkg", interfacePkg);
+		fileContent = fileContent.replace("serviceInterface", interfaceName);
+		fileContent = fileContent.replace("serviceImplclassname", serviceImpleClazz);
+		createPropertyFile(iProject,"ecf.r_osgi.peer");//set as a default value for the property 
+		return fileContent;
+	}
+	
+	
+	private static void createPropertyFile(IProject project,String container) throws IOException{
+		Properties prop = new Properties();
+		File file = project.getFile("service.properties").getLocation().toFile();
+		if(!file.exists()){
+			file.createNewFile();
+		}
+		FileOutputStream outputStream = new FileOutputStream(file);
+		prop.setProperty("container", container);
+		prop.store(outputStream, "remote service runtime properties");
+	}
+
 }

@@ -6,6 +6,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.ecf.tools.serviceGenerator.wizards.RemoteServiceClientGenWizard;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -24,21 +25,20 @@ public class ClientGenCommandHandler extends AbstractHandler{
 		 Object element = ((IStructuredSelection)selection).getFirstElement();
 		 if (element instanceof IResource) {
 			 setProject(((IResource)element).getProject());
+			 RemoteServiceClientGenWizard.setProject(((IResource)element).getProject());
 		 }
 		this.openWizard("org.eclipse.ecf.tools.serviceGenerator.wizards.RemoteServiceClientGenWizard");
 		return null;
 	}
 
-	public  void openWizard(String id) {
-		 // First see if this is a "new wizard".
+	private void openWizard(String id) {
+		 
 		 IWizardDescriptor descriptor = PlatformUI.getWorkbench()
 		   .getNewWizardRegistry().findWizard(id);
-		 // If not check if it is an "import wizard".
 		 if  (descriptor == null) {
 		   descriptor = PlatformUI.getWorkbench().getImportWizardRegistry()
 		   .findWizard(id);
 		 }
-		 // Or maybe an export wizard
 		 if  (descriptor == null) {
 		   descriptor = PlatformUI.getWorkbench().getExportWizardRegistry()
 		   .findWizard(id);

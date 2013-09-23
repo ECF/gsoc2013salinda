@@ -8,7 +8,7 @@
 package org.eclipse.ecf.tools.serviceGenerator.utils;
 
 public enum AsyncMethodType {
-	 BOTH(1,"both"),CALLBACK(2,"callback"),FUTURE(3,"future");
+	 BOTH(1,"AsyncType.BOTH"),CALLBACK(2,"AsyncType.CALLBACK"),FUTURE(3,"AsyncType.FUTURE");
 	 
 	 private int code;
 	 private String strCode;

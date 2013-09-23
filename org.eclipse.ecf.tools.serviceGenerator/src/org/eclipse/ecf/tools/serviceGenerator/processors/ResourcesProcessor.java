@@ -96,7 +96,8 @@ public static List<ICompilationUnit> getICompilationUnits(ISelection selection){
 				IAnnotation[] annotations = annotatable.getAnnotations();
 				for (IAnnotation iAnnotation : annotations) {
 					if(Annotaions.RService.getStrCode().equals(iAnnotation.getElementName())){
-						IMemberValuePair[] memberValuePairs = iAnnotation.getMemberValuePairs();
+						return Annotaions.RService.getCode();
+					/*	IMemberValuePair[] memberValuePairs = iAnnotation.getMemberValuePairs();
 						 for (IMemberValuePair iMemberValuePair : memberValuePairs) {
 							   if("type".equals(iMemberValuePair.getMemberName())){
 							         if(RServiceType.ASYNC.getStrCode().equals(iMemberValuePair.getValue().toString())){
@@ -105,7 +106,19 @@ public static List<ICompilationUnit> getICompilationUnits(ISelection selection){
 							        	 return RServiceType.SYNC.getCode();
 							         }
 							   }
-						}
+						}*/
+					  }else if(Annotaions.ARService.getStrCode().equals(iAnnotation.getElementName())){
+						  return Annotaions.ARService.getCode();
+				/*		  IMemberValuePair[] memberValuePairs = iAnnotation.getMemberValuePairs();
+						  for (IMemberValuePair iMemberValuePair : memberValuePairs) {
+							   if("type".equals(iMemberValuePair.getMemberName())){
+							         if(RServiceType.ASYNC.getStrCode().equals(iMemberValuePair.getValue().toString())){
+							        	 return RServiceType.ASYNC.getCode();
+							         }else if (RServiceType.SYNC.getStrCode().equals(iMemberValuePair.getValue().toString())){
+							        	 return RServiceType.SYNC.getCode();
+							         }
+							   }
+						}*/
 					}
 				}
 			}
