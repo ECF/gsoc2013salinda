@@ -7,6 +7,7 @@
 ******************************************************************************/
 package org.eclipse.ecf.tools.serviceGenerator.handler;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,36 +21,35 @@ import org.eclipse.ecf.tools.serviceGenerator.processors.TemplateProcessor;
 import org.eclipse.ecf.tools.serviceGenerator.templates.ServiceRegClazzTemplate;
 import org.eclipse.ecf.tools.serviceGenerator.utils.Annotaions;
 import org.eclipse.ecf.tools.serviceGenerator.utils.AsyncProperties;
+import org.eclipse.ecf.tools.serviceGenerator.utils.DependanciesConst;
 import org.eclipse.ecf.tools.serviceGenerator.utils.Logger;
-import org.eclipse.ecf.tools.serviceGenerator.utils.ServiceRegistrionConstants;
+import org.eclipse.ecf.tools.serviceGenerator.utils.ManifestEditor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.dom.Block;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.ExpressionStatement;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.Modifier;
-import org.eclipse.jdt.core.dom.PackageDeclaration;
-import org.eclipse.jdt.core.dom.PrimitiveType;
-import org.eclipse.jdt.core.dom.SimpleName;
-import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.osgi.framework.BundleException;
 
 public class ServiceGenCommandHandler extends AbstractHandler  {
 	private Logger log;
+	private static final String MSG_TITLE ="Generate R-Service";
 	@Override
 	public Object execute(ExecutionEvent arg0) throws ExecutionException {
 		log = new Logger(Activator.context);
 		IStructuredSelection selection =
                 (IStructuredSelection) HandlerUtil.getCurrentSelectionChecked(arg0);
 		boolean result=false;
-		List<ICompilationUnit> iCompilationUnits = ResourcesProcessor.getICompilationUnits(selection);
+		List<ICompilationUnit> iCompilationUnits=null;
+		try {
+			iCompilationUnits = ResourcesProcessor.getICompilationUnits(selection);
+		} catch (JavaModelException e) {
+			log.log(1, "coudn't find the compilation units !"+e.getMessage(), e);
+		}
 		 for (ICompilationUnit iCompilationUnit : iCompilationUnits) {
 		 boolean temp  = clazzGen(iCompilationUnit);
 		 if(!result){
@@ -58,7 +58,7 @@ public class ServiceGenCommandHandler extends AbstractHandler  {
 		}
 		 if(!result){
 		 Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-		 MessageDialog.openError(shell, "Generate R-Service", AsyncProperties.Service_Gen_Error_Msg);
+		 MessageDialog.openError(shell, MSG_TITLE, AsyncProperties.Service_Gen_Error_Msg);
 		 }
 		return null;
 	}
@@ -88,11 +88,8 @@ public class ServiceGenCommandHandler extends AbstractHandler  {
 			 String generatedInterfaceName = createNewInterfaceName(serviceType, interfaceName);
 			 String impleName = createNewImpleClazzName(generatedInterfaceName);
 			 String implPackgeName = createImplePackageName(pacKagename);
-			 
 			 String regClazzName = generatedInterfaceName +"ServiceRegister";
-			 String regPackgeName = implPackgeName;
-			 
-			 
+			 			 
 			 /*create a new Type for new Interface*/
 				TypeDeclaration createdType = astProcessor
 						.createType(
@@ -101,78 +98,33 @@ public class ServiceGenCommandHandler extends AbstractHandler  {
 								AsyncProperties.ASYNC_SERVICE_STR_IASYNC_REMOTE_SERVICEPROXY);
 			 /*create a new Type for Impl-Clazz*/
 			 TypeDeclaration createdImpleType = astProcessor.createType(impleName, false,generatedInterfaceName);
-			 
-			 /** create ServiceGen Tyepe*/
-			 TypeDeclaration createRegType2 = astProcessor.createType2(regClazzName, false, null, Modifier.ModifierKeyword.PUBLIC_KEYWORD);
-			 
+			 			 
 			 /*create a new package for implClazz*/
 			 astProcessor.cretaePackage(pacKagename,implPackgeName);
-			 
-			 /** create ServiceGen package*/
-			 PackageDeclaration serviceGenpack = astProcessor.cretaePackage2(implPackgeName);
-			 CompilationUnit serviceRegisterUnit = astProcessor.getServiceRegisterUnit();
-			 serviceRegisterUnit.setPackage(serviceGenpack);
-			 
-			
+			 	
 			 /*adding explicit imports */
 			 List<String> exImports = new ArrayList<String>();
 			 /*importing interface into impl-clazz*/
 			 exImports.add(pacKagename+"."+generatedInterfaceName);
 			 astProcessor.addImports(exImports,serviceType);
 			 
-			 /** creating imports*/
-			 List<String> strImports = new ArrayList<String>();
-			 strImports.add(pacKagename+"."+generatedInterfaceName);
-		     List<String> regimports = ServiceRegistrionConstants.getImports();
-			 for (String string : regimports) {
-				 strImports.add(string);
-			 }
-			 astProcessor.createImports(astProcessor.getServiceRegisterUnit(), strImports);
-			 
 			 /*adding methods signatures and methods for interface and impl-clazz*/
 			 astProcessor.addMethods(createdType,createdImpleType,serviceType);
 			 
-			 /*** creating the method*/
-			 MethodDeclaration createRegMethod = astProcessor.createMethod2();
-			 Modifier newModifier = astProcessor.getAst().newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
-			 createRegMethod.modifiers().add(newModifier);
-			 
-			 PrimitiveType newPrimitiveType = astProcessor.getAst().newPrimitiveType(PrimitiveType.VOID);
-			 createRegMethod.setReturnType2(newPrimitiveType);
-			 
-			 SimpleName newSimpleMethodName =astProcessor.getAst().newSimpleName("register");
-			 createRegMethod.setName(newSimpleMethodName);
-			 
-			 Block newBlock = astProcessor.getAst().newBlock();
-			 StringLiteral newStringLiteral = astProcessor.getAst().newStringLiteral();
-			 newStringLiteral.setLiteralValue("AAAAAAAAA");
-			 
-			 
-			 ExpressionStatement newExpressionStatement = astProcessor.getAst().newExpressionStatement(newStringLiteral);
-			 MethodInvocation newMethodInvocation = astProcessor.getAst().newMethodInvocation();
-			 
-			 
-		/*	 newMethodInvocation.setExpression(newExpressionStatement);
-			 newBlock.statements().add(newExpressionStatement);
-			 newBlock.statements().add(newMethodInvocation);*/
-			 createRegMethod.setBody(newBlock);
-			 
-			 createRegType2.bodyDeclarations().add(createRegMethod);
-			 astProcessor.getServiceRegisterUnit().types().add(createRegType2);
-			 		  
-			 String classTemplete = ServiceRegClazzTemplate.createServiceRegisterTemplete(javaProject.getElementName(),
-					 implPackgeName, regClazzName, generatedInterfaceName, pacKagename,impleName,javaProject.getProject());
+			 String classTemplete = ServiceRegClazzTemplate.createServiceRegisterTemplete(implPackgeName, regClazzName, generatedInterfaceName, pacKagename,impleName,javaProject.getProject());
 			 /*for a Async-service create both Async interface and imple-clazz*/
 			 if(serviceType==Annotaions.ARService.getCode()){
 			 templateProcessor.generateAstTemplate(astProcessor.getNewunit(), pacKagename, generatedInterfaceName);
 			 templateProcessor.generateAstTemplate(astProcessor.getImpleunit(), implPackgeName, impleName);
 			 templateProcessor.generateStrTemplate(classTemplete, implPackgeName, regClazzName);
+			 
 			 }else if(serviceType==Annotaions.RService.getCode()){
 				 /*for a sync-service imple-clazz Only*/
 				 templateProcessor.generateAstTemplate(astProcessor.getImpleunit(), implPackgeName, impleName);
-				// templateProcessor.generateAstTemplate(serviceRegisterUnit,regPackgeName, regClazzName);
 				 templateProcessor.generateStrTemplate(classTemplete, implPackgeName, regClazzName);
 			 }
+			 addDependancies(javaProject);
+			 templateProcessor.doRefresh();
 			 return true;
 		 }else{
 			 return false;
@@ -181,6 +133,15 @@ public class ServiceGenCommandHandler extends AbstractHandler  {
 				log.log(1, "Class generating process has faild !"+e.getMessage(), e);
 				return false;
 	    }
+	}
+	private void addDependancies(IJavaProject javaProject)
+			throws BundleException, IOException {
+		String[] importsList = new String[]{DependanciesConst.ECF_REMOTE,DependanciesConst.ANNOTATIONS
+			,DependanciesConst.ECF_CORE,DependanciesConst.FUTURE,DependanciesConst.ECF_IDENTITY};
+		String rawPath =javaProject.getProject().getFile("META-INF/MANIFEST.MF").getLocationURI().getRawPath();
+		for (String pluigimport : importsList) {
+			ManifestEditor.addPluginDependency("Import-Package",pluigimport,"version",null, false,rawPath);
+		}
 	}
 
 	private String createImplePackageName(String pacKagename) {

@@ -7,55 +7,14 @@
 ******************************************************************************/
 package org.eclipse.ecf.tools.serviceGenerator.utils;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URL;
 
 public class FileUtils{
-    
-  public static void createFile(File destinationFile, String content) throws IOException{
-    	if (!(destinationFile.getParentFile()==null || destinationFile.getParentFile().exists())){
-    		destinationFile.getParentFile().mkdirs();
-    	}
-        InputStream dataStream=new ByteArrayInputStream(content.getBytes());
-        createFile(destinationFile, dataStream);
-        dataStream.close();
-    }
-
-    public static void createFile(File destinationFile, InputStream dataStream)
-            throws FileNotFoundException, IOException {
-	    FileOutputStream out = new FileOutputStream(destinationFile);
-        createFile(dataStream, out);
-        out.close();
-    }
-
-    public static void createFile(String content, OutputStream out) throws IOException{
-        InputStream dataStream=new ByteArrayInputStream(content.getBytes());
-        createFile(dataStream, out);
-        dataStream.close();
-    }
-    
-	public static void createFile(InputStream dataStream, OutputStream out)
-			throws IOException {
-		byte[] data=new byte[1024];
-        int readLength;
-        while((readLength=dataStream.read(data))>0){
-        	out.write(data,0,readLength);
-        }
-        dataStream.close();
-        out.close();
-	}
-    
-    public static void writeContent(File destinationFile, String content) throws IOException{
-    	createFile(destinationFile, content);
-    }
-    
+      
 	public static String getContentAsString(URL url) throws IOException {
 		InputStream openStream = url.openStream();
 	    String contentAsString = getContentAsString(openStream);

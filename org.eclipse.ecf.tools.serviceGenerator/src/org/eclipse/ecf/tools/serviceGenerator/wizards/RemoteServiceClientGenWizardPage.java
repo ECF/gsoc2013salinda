@@ -10,7 +10,9 @@ package org.eclipse.ecf.tools.serviceGenerator.wizards;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.ecf.tools.serviceGenerator.Activator;
 import org.eclipse.ecf.tools.serviceGenerator.handler.ClientGenCommandHandler;
+import org.eclipse.ecf.tools.serviceGenerator.utils.Logger;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
@@ -32,12 +34,13 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.wizards.IWizardDescriptor;
 
 public class RemoteServiceClientGenWizardPage extends WizardPage {
+	private static final String PDE_NEW_PROJECT_WIZARD = "org.eclipse.pde.ui.NewProjectWizard";
+	private static final String ORG_ECLIPSE_PDE_PLUGIN_NATURE = "org.eclipse.pde.PluginNature";
 	private Combo projectName;
 	private Text packageName;
 	private Text className;
 	private Text serviceName;
 	private Text serviceURL;
-	private Combo radioservieType;
 	private Combo combocontainers;
     private Composite container;
     private Button newWizard;
@@ -45,6 +48,7 @@ public class RemoteServiceClientGenWizardPage extends WizardPage {
     private String serviceType;
     private IProject iProject;
     private boolean isMenuClick;
+    Logger log = new Logger(Activator.context);
 	  public RemoteServiceClientGenWizardPage() {
 	    super("Service Details");
 	    setTitle("Service Details Page");
@@ -64,13 +68,13 @@ public class RemoteServiceClientGenWizardPage extends WizardPage {
            isMenuClick = true;
 		   for (IProject prj : projects) {
 				try {
-		            if (!prj.isOpen() || !prj.hasNature("org.eclipse.pde.PluginNature") ){
+		            if (!prj.isOpen() || !prj.hasNature(ORG_ECLIPSE_PDE_PLUGIN_NATURE) ){
 		            	continue;
 		            }
 		            items.setData(prj.getName(), prj);
 		            items.add(prj.getName());
 	            } catch (CoreException e1) {
-		            e1.printStackTrace();
+	            	log.log(1, e1.getMessage());
 		            continue;
 	            }
 		   }
@@ -79,7 +83,7 @@ public class RemoteServiceClientGenWizardPage extends WizardPage {
 	  private Listener openPluginProjectWizard(final Combo items){
 	  Listener openerListener = new Listener() {
 	      public void handleEvent(Event event) {
-	    	  openWizard("org.eclipse.pde.ui.NewProjectWizard");
+	    	  openWizard(PDE_NEW_PROJECT_WIZARD);
 	    	  loadProject(items);
 	    	  items.select(0);
 	      }
@@ -88,7 +92,6 @@ public class RemoteServiceClientGenWizardPage extends WizardPage {
 	  }
 	  
 	  private void openWizard(String id) {
-			 
 			 IWizardDescriptor descriptor = PlatformUI.getWorkbench()
 			   .getNewWizardRegistry().findWizard(id);
 			 if  (descriptor == null) {
@@ -108,7 +111,7 @@ public class RemoteServiceClientGenWizardPage extends WizardPage {
 			     wd.open();
 			   }
 			 } catch  (CoreException e) {
-			   e.printStackTrace();
+				 log.log(1, e.getMessage());
 	     }
 	}
 
@@ -148,37 +151,21 @@ public class RemoteServiceClientGenWizardPage extends WizardPage {
 	    newWizard.pack();
 	     
 	    packageName = createTextFeild("Package:");
+	    
 	    className = createTextFeild("Class:");
 	    
 	    drawVarticalLine();
 	    
 	    serviceName = createTextFeild("Service Interface:");
-	    
-	   /* GridData serviceGD1 = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
-	    Label label3 = new Label(container, SWT.NONE);
-	    label3.setText("Select service type");
-	    label3.setLayoutData(serviceGD1);
-	    GridData serviceGD2 = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
-	    serviceGD2.horizontalSpan =2;
-	    radioservieType = new Combo(container, SWT.READ_ONLY);
-	    String items[] = {"sync", "Async"};
-	    radioservieType.setItems(items);
-	    radioservieType.select(0);
-	    radioservieType.addSelectionListener(new SelectionAdapter() {
-	        public void widgetSelected(SelectionEvent e) {
-	        	setServiceType(radioservieType.getText());
-	        }
-	      });
-	    radioservieType.setLayoutData(serviceGD2);
-	    radioservieType.pack();*/
-	    
+	   
 	    drawVarticalLine();
+	    
 	    setServiceURL(createTextFeild("Service URL:"));
 	    
 	    GridData containerGD = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
-	    Label label4 = new Label(container, SWT.NONE);
-	    label4.setText("Select container type");
-	    label4.setLayoutData(containerGD);
+	    Label labelContainerType = new Label(container, SWT.NONE);
+	    labelContainerType.setText("Select container type");
+	    labelContainerType.setLayoutData(containerGD);
 	    
 	    GridData containerGD1 = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
 	    containerGD1.horizontalSpan =2;
@@ -207,9 +194,9 @@ public class RemoteServiceClientGenWizardPage extends WizardPage {
      
 	private Text createTextFeild(String name) {
 		GridData gd = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
-		Label label2 = new Label(container, SWT.NONE);
-	    label2.setText(name);
-	    label2.setLayoutData(gd);
+		Label labelName = new Label(container, SWT.NONE);
+	    labelName.setText(name);
+	    labelName.setLayoutData(gd);
 	    GridData gdlb = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
 	    gdlb.horizontalSpan = 2;
 	    Text temp = new Text(container, SWT.BORDER | SWT.SINGLE);
@@ -217,18 +204,23 @@ public class RemoteServiceClientGenWizardPage extends WizardPage {
 	    temp.addKeyListener(new KeyListener() {
 	      @Override
 	      public void keyPressed(KeyEvent e) {
+	    	  validate();
 	      }
 
 	      @Override
 	      public void keyReleased(KeyEvent e) {
-	    	  if(packageName!=null && serviceName!=null && className!=null){
+	    	  validate();
+	      }
+
+		private void validate() {
+			if(packageName!=null && serviceName!=null && className!=null){
 	        if (!packageName.getText().isEmpty()&&!serviceName.getText().isEmpty()&&!className.getText().isEmpty()) {
 	          setPageComplete(true);
 	        }else{
 	           setPageComplete(false);
 	        }
 	        }
-	      }
+		}
 	    });
 	    temp.setLayoutData(gdlb);
 	    return temp;

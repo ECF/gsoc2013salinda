@@ -22,12 +22,7 @@ public class MethodVisitor extends ASTVisitor {
                 return super.visit(node);
         }
        
-        /**
-         *
-         * @return
-         */
         public List<MethodDeclaration> getMethods() {
                 return methods;
-        }
-       
+        }  
 }

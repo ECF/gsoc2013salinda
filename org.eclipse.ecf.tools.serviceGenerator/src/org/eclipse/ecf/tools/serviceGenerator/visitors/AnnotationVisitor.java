@@ -32,10 +32,6 @@ public class AnnotationVisitor extends ASTVisitor {
                 return super.visit(node);
         }
        
-        /**
-         *
-         * @return
-         */
         public List<MarkerAnnotation> getAnnotations() {
                 return annotations;
         }

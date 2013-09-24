@@ -9,45 +9,46 @@ package org.eclipse.ecf.tools.serviceGenerator.wizards;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.ecf.tools.serviceGenerator.Activator;
 import org.eclipse.ecf.tools.serviceGenerator.handler.ClientGenCommandHandler;
 import org.eclipse.ecf.tools.serviceGenerator.templates.ServiceClientTemplate;
-import org.eclipse.ecf.tools.serviceGenerator.utils.JavaProjectUtils;
+import org.eclipse.ecf.tools.serviceGenerator.utils.DependanciesConst;
+import org.eclipse.ecf.tools.serviceGenerator.utils.Logger;
 import org.eclipse.ecf.tools.serviceGenerator.utils.ManifestEditor;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.wizards.IWizardDescriptor;
 
 
 public class RemoteServiceClientGenWizard extends Wizard implements INewWizard{
 
 	protected  RemoteServiceClientGenWizardPage page;
 	private static IProject project;
+	private Logger log;
 	public RemoteServiceClientGenWizard() {
 		setWindowTitle("Client Code Gen Wizard");
+		log = new Logger(Activator.context);
+	}
+	
+	@Override
+	public void init(IWorkbench arg0, IStructuredSelection arg1) {
+		
 	}
 
 	@Override
@@ -61,7 +62,7 @@ public class RemoteServiceClientGenWizard extends Wizard implements INewWizard{
 		 try{
  			IJavaProject iJavaProject = JavaCore.create(getProject());
 			Properties prop = new Properties();
-			File file = project.getFile("service.properties").getLocation().toFile();
+			File file = getProject().getFile("service.properties").getLocation().toFile();
 			if(!file.exists()){
 				file.createNewFile();
 			}
@@ -75,45 +76,20 @@ public class RemoteServiceClientGenWizard extends Wizard implements INewWizard{
 	     	String template = ServiceClientTemplate.createServiceConsumerClassTemplete(project.getName(),
 	     			page.getPackageName(), page.getclassName(),page.getServiceName().toString());
 			sourcePackage.createCompilationUnit(page.getclassName()+".java", template, false, null);
-			String imports = "org.eclipse.ecf.remoteservice,org.eclipse.ecf.core,org.eclipse.ecf.core.identity";
-			String[] importsList = imports.split(",");
-			String rawPath = project.getFile("META-INF/MANIFEST.MF").getLocationURI().getRawPath();
-			for (String pluigimport : importsList) {
-		    	ManifestEditor.addPluginDependency("Import-Package",pluigimport,"version",null, false,rawPath);
-			}
- 			project.refreshLocal(IResource.DEPTH_INFINITE,new NullProgressMonitor());
+			String[] importsList = new String[]{DependanciesConst.ECF_REMOTE
+					,DependanciesConst.ECF_CORE,DependanciesConst.ECF_IDENTITY};
+				String rawPath =getProject().getFile("META-INF/MANIFEST.MF").getLocationURI().getRawPath();
+				for (String pluigimport : importsList) {
+					ManifestEditor.addPluginDependency("Import-Package",pluigimport,"version",null, false,rawPath);
+				}
+			doRefresh(iJavaProject);
 			return true;
 		 }catch(Exception e){
-			 e.printStackTrace();
+			 log.log(1, "coudn't complete the wizard !"+e.getMessage(), e);
 		 }
 		 return false;
 	}
 	
-	
-
-	@Override
-	public void init(IWorkbench arg0, IStructuredSelection arg1) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public static IFolder getWorkspaceFolder(IProject project, String...folderNamePath){
-		IFolder parentFolder = project.getFolder(folderNamePath[0]);
-		List<String> folderPath = new ArrayList<String>(Arrays.asList(folderNamePath));
-		folderPath.remove(0);
-		String[] newFolderNamePath=folderPath.toArray(new String[]{});
-		return getWorkspaceFolder(parentFolder, newFolderNamePath);
-	}
-	public static IFolder getWorkspaceFolder(IFolder parentFolder,
-			String...newFolderNamePath) {
-		IFolder leafFolder = parentFolder;
-		for (String pathElement:newFolderNamePath) {
-			leafFolder = parentFolder.getFolder(pathElement);
-			parentFolder = leafFolder;
-		}
-		return leafFolder;
-	}
-
 	public static IProject getProject() {
 		ClientGenCommandHandler.setProject(null);//Reset the static reference
 		return project;
@@ -121,5 +97,34 @@ public class RemoteServiceClientGenWizard extends Wizard implements INewWizard{
 
 	public static void setProject(IProject project) {
 		RemoteServiceClientGenWizard.project = project;
+	}
+	
+	public void doRefresh(IJavaProject javaProject) throws InvocationTargetException,
+			InterruptedException {
+		ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(
+				Display.getDefault().getActiveShell());
+		progressMonitorDialog.create();
+		progressMonitorDialog.open();
+		progressMonitorDialog.run(true, false, new ProjectRefreshJob(
+				javaProject));
+	}
+
+	private class ProjectRefreshJob implements IRunnableWithProgress {
+
+		private IJavaProject javaProject;
+
+		public ProjectRefreshJob(IJavaProject javaProject) {
+			this.javaProject = javaProject;
+		}
+
+		@Override
+		public void run(IProgressMonitor monitor) {
+			try {
+				javaProject.getProject().refreshLocal(IResource.DEPTH_INFINITE,
+						monitor);
+			} catch (CoreException e) {
+				log.log(1, "Code gen process stop " + e.getMessage(), e);
+			}
+		}
 	}
 }

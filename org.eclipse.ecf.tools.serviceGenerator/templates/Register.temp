@@ -2,36 +2,37 @@ package
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Properties;
+
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.ecf.core.ContainerCreateException;
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.core.IContainerManager;
 import org.eclipse.ecf.remoteservice.IRemoteServiceContainerAdapter;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
-import projectNameoftheActivator.Activator;
+
 
 public class ServiceRegisterClassName{ 
 
 	private ServiceTracker containerManagerServiceTracker;
 	private Properties prop;
+	private Bundle bundle;
 
    public ServiceRegisterClassName()throws Exception{
-  	    Properties prop = new Properties();
-		prop.load(new FileInputStream("service.properties"));
+	    bundle = FrameworkUtil.getBundle(this.getClass());
+	    URL fileURL = bundle.getEntry("service.properties");
+	    File file = new File(FileLocator.resolve(fileURL).toURI());
+  	    prop = new Properties();
+		prop.load(new FileInputStream(file));
    }
    
 	public void register()
 			throws ContainerCreateException {
-		BundleContext context = Platform.getBundle(Activator.PLUGIN_ID).getBundleContext();
-		IContainerManager containerManager = getContainerManagerService(context);
+		IContainerManager containerManager = getContainerManagerService(bundle.getBundleContext());
 		IContainer container = containerManager.getContainerFactory()
 				.createContainer(prop.getProperty("container"));
 		IRemoteServiceContainerAdapter containerAdapter = (IRemoteServiceContainerAdapter) container
@@ -39,7 +40,7 @@ public class ServiceRegisterClassName{
 		containerAdapter.registerRemoteService(new String[] { "serviceInterface" },
 				serviceImplclassname.class, null);
 	}
-
+	
 	private IContainerManager getContainerManagerService(BundleContext context) {
 
 		if (containerManagerServiceTracker == null) {
@@ -48,16 +49,6 @@ public class ServiceRegisterClassName{
 			containerManagerServiceTracker.open();
 		}
 		return (IContainerManager) containerManagerServiceTracker.getService();
-	}
-	
-	private void loadServiceProperties() throws URISyntaxException,
-			IOException, FileNotFoundException {
-		Properties prop = new Properties();
-		Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
-		URL fileURL = bundle.getEntry("service.properties");
-		File file = new File(FileLocator.resolve(fileURL).toURI());
-		FileInputStream inputStream = new FileInputStream(file);
-		prop.load(inputStream);
 	}
 }
 	

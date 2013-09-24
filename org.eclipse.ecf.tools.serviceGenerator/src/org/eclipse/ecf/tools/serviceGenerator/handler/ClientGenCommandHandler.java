@@ -1,3 +1,10 @@
+/*******************************************************************************
+* Copyright (c) 2013 Salinda Jayawardana. All rights reserved. This
+* program and the accompanying materials are made available under the terms of
+* the Eclipse Public License v1.0 which accompanies this distribution, and is
+* available at http://www.eclipse.org/legal/epl-v10.html
+*
+******************************************************************************/
 package org.eclipse.ecf.tools.serviceGenerator.handler;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -6,9 +13,9 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.ecf.tools.serviceGenerator.Activator;
+import org.eclipse.ecf.tools.serviceGenerator.utils.Logger;
 import org.eclipse.ecf.tools.serviceGenerator.wizards.RemoteServiceClientGenWizard;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -18,16 +25,19 @@ import org.eclipse.ui.wizards.IWizardDescriptor;
 
 public class ClientGenCommandHandler extends AbstractHandler{
     private static IProject  project;
-	@Override
-	public Object execute(ExecutionEvent arg0) throws ExecutionException {
+    private static final String CLIENT_WIZARD_ID="org.eclipse.ecf.tools.serviceGenerator.wizards.RemoteServiceClientGenWizard";
+    private Logger log;
+    @Override
+	public Object execute(ExecutionEvent evnt) throws ExecutionException {
 		 IStructuredSelection selection =
-                (IStructuredSelection) HandlerUtil.getCurrentSelectionChecked(arg0);
+                (IStructuredSelection) HandlerUtil.getCurrentSelectionChecked(evnt);
 		 Object element = ((IStructuredSelection)selection).getFirstElement();
 		 if (element instanceof IResource) {
 			 setProject(((IResource)element).getProject());
 			 RemoteServiceClientGenWizard.setProject(((IResource)element).getProject());
 		 }
-		this.openWizard("org.eclipse.ecf.tools.serviceGenerator.wizards.RemoteServiceClientGenWizard");
+		log = new Logger(Activator.context);
+		this.openWizard(CLIENT_WIZARD_ID);
 		return null;
 	}
 
@@ -52,7 +62,7 @@ public class ClientGenCommandHandler extends AbstractHandler{
 		     wd.open();
 		   }
 		 } catch  (CoreException e) {
-		   e.printStackTrace();
+			 log.log(1, "Wizard searching error !"+e.getMessage(), e);
 		 }
 		}
 

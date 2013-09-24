@@ -332,6 +332,7 @@ public class AstProcessor {
 	 * @param userMethodDec - original method
 	 * @param methodDeclaration - constructing method
 	 */
+	@SuppressWarnings("unchecked")
 	private void addExceptions(MethodDeclaration userMethodDec,
 			MethodDeclaration methodDeclaration) {
 		try{

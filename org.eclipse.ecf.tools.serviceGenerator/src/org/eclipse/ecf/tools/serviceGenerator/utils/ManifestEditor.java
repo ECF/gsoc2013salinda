@@ -13,7 +13,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.jar.Attributes;
-import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import org.eclipse.osgi.util.ManifestElement;
@@ -29,15 +28,12 @@ public class ManifestEditor {
 		    Manifest manifest = new Manifest(in);
 			boolean foundHeader = false; 
 			boolean hasValuesForPlugin = false; 
-			boolean islastHeader=false;
 			StringBuilder strBuilder = new StringBuilder(); 
 			
 			Attributes mainAttrs = manifest.getMainAttributes(); 
-			int tempCount =0;
 			for (Object entryName : mainAttrs.keySet()) { 
 				String values; 
 				String header; 
-				tempCount++;
 				if(entryName instanceof String) { 
 					header = (String) entryName; 
 					values = mainAttrs.getValue(header); 
@@ -51,9 +47,6 @@ public class ManifestEditor {
 				if(!newbundleHeader.equals(header)) {
 						continue; 
 				}
-			    if(tempCount==mainAttrs.keySet().size()){
-			    	islastHeader = true;
-			    }
 
 			foundHeader = true; 
 			if(values != null){
@@ -154,7 +147,6 @@ public class ManifestEditor {
 				 if(version!=null && !version.isEmpty()){
 					 newValue = plugin + ";" + bundleVersionAttr + "=\"" + version+"\"";
 				 } 
-				//newValue = (areExistingValues)?(existingValues+",\n "+newValue):newValue;
 				if(areExistingValues){
 					newValue =existingValues+",\n " + newValue;
 				}else{
@@ -169,31 +161,4 @@ public class ManifestEditor {
 			outputStream.flush();
 		    outputStream.close();
 	}
-
-	//How to use this
-			public static void main(String[] args) throws Exception { 
-			try { ManifestEditor editor= new ManifestEditor();
-			//	org.eclipse.ecf.remoteservice,org.eclipse.ecf.core,org.eclipse.ecf.core.identity
-				String fileName ="/home/salinda/workspace/ecfTool/TestBundle/src/MANIFEST.MF";
-				/*ManifestEditor.addPluginDependency("Import-Package",
-						"org.eclipse.ecf.remoteservice,\n org.eclipse.ecf.core,\n org.eclipse.ecf.core.identity",
-						"version",null, false,fileName); */
-				
-				
-				
-				
-				
-				
-				//ManifestEditor.addPluginDependency("Import-Package","org.eclipse.ecf.core","version",null, false,fileName); 
-				ManifestEditor.addPluginDependency("Import-Package","org.eclipse.ecf.core.identity","version",null, false,fileName); 
-				ManifestEditor.addPluginDependency("Import-Package","org.eclipse.ecf.core.abc","version",null, false,fileName);
-				ManifestEditor.addPluginDependency("Import-Package","org.eclipse.ecf.core.def","version",null, false,fileName);
-				ManifestEditor.addPluginDependency("Import-Package","org.eclipse.ecf.core.hjk","version",null, false,fileName);
-			} 
-			catch (Throwable t) { 
-			System.err.println("Unexpected Exception: " + t); 
-			t.printStackTrace(); 
-			} 
-		}  
-			
 }

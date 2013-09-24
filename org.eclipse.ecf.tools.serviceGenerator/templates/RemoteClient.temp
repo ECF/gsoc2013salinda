@@ -8,7 +8,6 @@ import java.net.URL;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.core.IContainerManager;
 import org.eclipse.ecf.core.identity.IDFactory;
@@ -16,14 +15,12 @@ import org.eclipse.ecf.remoteservice.IRemoteService;
 import org.eclipse.ecf.remoteservice.IRemoteServiceContainerAdapter;
 import org.eclipse.ecf.remoteservice.IRemoteServiceReference;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
-import projectNameoftheActivator.Activator;
 
 public class ServiceConsumerClassName{
 
-	private static BundleContext context;
-	private String containerDescription; 
+	private Bundle bundle;
 	private ServiceTracker containerManagerServiceTracker;
 	private IContainer container;
 	private IRemoteService remoteService;
@@ -31,38 +28,34 @@ public class ServiceConsumerClassName{
   
 	
 	public ServiceConsumerClassName()throws Exception{
-		Properties prop = new Properties();
-		prop.load(new FileInputStream("service.properties"));
+	    loadServiceProperties();
 		createClient();
 	}
 	
 	private void loadServiceProperties() throws URISyntaxException,
 			IOException, FileNotFoundException {
-		Properties prop = new Properties();
-		Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
+		prop = new Properties();
+		bundle = FrameworkUtil.getBundle(this.getClass());
 		URL fileURL = bundle.getEntry("service.properties");
 		File file = new File(FileLocator.resolve(fileURL).toURI());
-		FileInputStream inputStream = new FileInputStream(file);
-		prop.load(inputStream);
+		prop.load(new FileInputStream(file));
 	}
 
 	private void createClient()throws Exception{
-		 
-			context = Platform.getBundle(Activator.PLUGIN_ID).getBundleContext(); 
+		
 			IContainerManager containerManager = getContainerManagerService();
 			container = containerManager.getContainerFactory().createContainer(prop.getProperty("container"));
 			IRemoteServiceContainerAdapter containerAdapter = (IRemoteServiceContainerAdapter) container
 					.getAdapter(IRemoteServiceContainerAdapter.class);
 			IRemoteServiceReference[] serviceReference = containerAdapter
 					.getRemoteServiceReferences(IDFactory.getDefault().createID(container.getConnectNamespace(),
-							prop.getProperty("serviceUrl")), "serviceinterfaceName", null);
+							prop.getProperty("serviceUrl")), "Text {}", null);
 			remoteService = containerAdapter.getRemoteService(serviceReference[0]);
  
 	}
-	
    private IContainerManager getContainerManagerService() {
 		if (containerManagerServiceTracker == null) {
-	    containerManagerServiceTracker = new ServiceTracker(context, IContainerManager.class.getName(),null);
+	    containerManagerServiceTracker = new ServiceTracker(bundle.getBundleContext(), IContainerManager.class.getName(),null);
 		containerManagerServiceTracker.open();
 		}
 		return (IContainerManager) containerManagerServiceTracker.getService();
@@ -71,4 +64,5 @@ public class ServiceConsumerClassName{
 	public IRemoteService getRemoteService() {
 		return remoteService;
 	}	
+ 
 }

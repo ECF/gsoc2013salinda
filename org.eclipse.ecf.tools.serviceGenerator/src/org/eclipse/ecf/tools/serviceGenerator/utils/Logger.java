@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2013 unknow author. All rights reserved. This
+* Copyright (c) 2013 Salinda Jayawardana. All rights reserved. This
 * program and the accompanying materials are made available under the terms of
 * the Eclipse Public License v1.0 which accompanies this distribution, and is
 * available at http://www.eclipse.org/legal/epl-v10.html
@@ -12,13 +12,13 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
+@SuppressWarnings("rawtypes")
 public class Logger extends ServiceTracker implements LogService{
 
 	/** LogService interface class name */
 	protected final static String clazz = "org.osgi.service.log.LogService"; //$NON-NLS-1$
 
-	
- 
+	@SuppressWarnings("unchecked")
 	public Logger(BundleContext context) {
 		super(context, clazz, null);
 		 
@@ -36,6 +36,7 @@ public class Logger extends ServiceTracker implements LogService{
 		log(reference, level, message, null);
 	}
 
+	@SuppressWarnings({ "unchecked" })
 	public synchronized void log(ServiceReference reference, int level,
 			String message, Throwable exception) {
 		ServiceReference[] references = getServiceReferences();
@@ -49,7 +50,7 @@ public class Logger extends ServiceTracker implements LogService{
 					try {
 						service.log(reference, level, message, exception);
 					} catch (Exception e) {
-						// TODO: consider printing to System Error
+						
 					}
 				}
 			}
