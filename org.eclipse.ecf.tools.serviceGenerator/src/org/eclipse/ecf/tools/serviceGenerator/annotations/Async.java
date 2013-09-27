@@ -14,5 +14,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)	
 public @interface Async {
-	String type() default "callback";//future ,both
+	AsyncType type() default AsyncType.CALLBACK;
 }
