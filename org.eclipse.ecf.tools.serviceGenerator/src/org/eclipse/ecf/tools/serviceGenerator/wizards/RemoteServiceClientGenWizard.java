@@ -85,6 +85,9 @@ public class RemoteServiceClientGenWizard extends Wizard implements INewWizard{
 			doRefresh(iJavaProject);
 			return true;
 		 }catch(Exception e){
+			// TODO Never ever swallow exceptions. A user does not pay attention
+			// to the log and thus will simply be lost because nothing happens
+			// in case of error.
 			 log.log(1, "coudn't complete the wizard !"+e.getMessage(), e);
 		 }
 		 return false;
