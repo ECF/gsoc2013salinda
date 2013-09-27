@@ -16,5 +16,4 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)	
 public @interface RemoteService {
 	String type() default "sync";
-	String container() default "ecf.r_osgi.peer";
 }
