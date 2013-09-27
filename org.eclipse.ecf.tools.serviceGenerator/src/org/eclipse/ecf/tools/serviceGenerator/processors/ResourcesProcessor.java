@@ -13,7 +13,7 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.ecf.tools.serviceGenerator.utils.Annotaions;
+import org.eclipse.ecf.tools.serviceGenerator.utils.Annotations;
 import org.eclipse.jdt.core.IAnnotatable;
 import org.eclipse.jdt.core.IAnnotation;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -74,10 +74,10 @@ public static List<ICompilationUnit> getICompilationUnits(ISelection selection) 
 				IAnnotatable annotatable = (IAnnotatable)iType;
 				IAnnotation[] annotations = annotatable.getAnnotations();
 				for (IAnnotation iAnnotation : annotations) {
-					if(Annotaions.RService.getStrCode().equals(iAnnotation.getElementName())){
-						return Annotaions.RService.getCode();
-					  }else if(Annotaions.ARService.getStrCode().equals(iAnnotation.getElementName())){
-						  return Annotaions.ARService.getCode();
+					if(Annotations.RService.getStrCode().equals(iAnnotation.getElementName())){
+						return Annotations.RService.getCode();
+					  }else if(Annotations.ARService.getStrCode().equals(iAnnotation.getElementName())){
+						  return Annotations.ARService.getCode();
 					}
 				}
 			}
