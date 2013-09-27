@@ -14,7 +14,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 
 public class MethodVisitor extends ASTVisitor {
-        List<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
+		private List<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
 
         @Override
         public boolean visit(MethodDeclaration node) {

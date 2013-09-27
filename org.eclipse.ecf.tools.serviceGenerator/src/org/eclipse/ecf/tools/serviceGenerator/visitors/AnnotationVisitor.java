@@ -15,8 +15,8 @@ import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.NormalAnnotation;
 
 public class AnnotationVisitor extends ASTVisitor {
-        List<MarkerAnnotation> annotations = new ArrayList<MarkerAnnotation>();
-        List<NormalAnnotation> normalAnnotations=new ArrayList<NormalAnnotation>();
+        private List<MarkerAnnotation> annotations = new ArrayList<MarkerAnnotation>();
+        private List<NormalAnnotation> normalAnnotations=new ArrayList<NormalAnnotation>();
        
         @Override
         public boolean visit(MarkerAnnotation node) {
