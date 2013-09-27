@@ -34,7 +34,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.wizards.IWizardDescriptor;
 
 public class RemoteServiceClientGenWizardPage extends WizardPage {
-	private static final String PDE_NEW_PROJECT_WIZARD = "org.eclipse.pde.ui.NewProjectWizard";
+	private static final String PDE_NEW_PROJECT_WIZARD = "org.eclipse.pde.ui.NewProjectWizard"; //TODO "org.eclipse.pde.ui." not ECF's namespace
 	private static final String ORG_ECLIPSE_PDE_PLUGIN_NATURE = "org.eclipse.pde.PluginNature";
 	private Combo projectName;
 	private Text packageName;
