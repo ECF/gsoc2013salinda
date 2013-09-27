@@ -37,6 +37,8 @@ public class ServiceConsumerClassName{
 		prop = new Properties();
 		bundle = FrameworkUtil.getBundle(this.getClass());
 		URL fileURL = bundle.getEntry("service.properties");
+		//TODO Do not use Eclipse specific FileLocator (replace with similar functionality in OSGi)
+		//Generated code should not import org.eclipse.core.runtime as this might not be available (e.g. if running ECF on Apache Felix OSGi runtime.
 		File file = new File(FileLocator.resolve(fileURL).toURI());
 		prop.load(new FileInputStream(file));
 	}
