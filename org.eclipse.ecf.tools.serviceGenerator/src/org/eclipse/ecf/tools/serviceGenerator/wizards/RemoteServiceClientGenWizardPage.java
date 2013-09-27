@@ -160,6 +160,8 @@ public class RemoteServiceClientGenWizardPage extends WizardPage {
 	   
 	    drawVarticalLine();
 	    
+	    //TODO Indicate optional input fields
+	    //TODO Pay attention to typos in methods,class,... names ("Feild" vs "Field")
 	    setServiceURL(createTextFeild("Service URL:"));
 	    
 	    GridData containerGD = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
